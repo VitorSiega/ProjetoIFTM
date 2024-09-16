@@ -28,7 +28,7 @@ public class ModelUserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return modelUser.getPassword();
+        return modelUser.getSenha();
     }
 
     @Override

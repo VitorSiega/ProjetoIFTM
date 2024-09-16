@@ -42,7 +42,7 @@ public class UserService {
         // Cria o novo usuário com a role associada
         ModelUser newUser = ModelUser.builder()
                 .email(createUserDto.email())
-                .password(passwordEncoder.encode(createUserDto.password()))
+                .senha(passwordEncoder.encode(createUserDto.senha()))
                 .roles(List.of(role)) // Associa a role ao usuário
                 .build();
 
@@ -52,7 +52,7 @@ public class UserService {
     public JwtTokenDTO autenticarUsuario(LoginUserDTO loginUserDto) {
         // Cria o token de autenticação
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
+                new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.senha());
 
         // Autentica o usuário
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
