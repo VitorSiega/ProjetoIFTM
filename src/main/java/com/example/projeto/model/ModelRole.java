@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class ModelRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)  // Especifica que o enum será armazenado como string no banco de dados

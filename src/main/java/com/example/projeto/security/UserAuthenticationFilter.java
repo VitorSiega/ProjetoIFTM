@@ -37,36 +37,33 @@ public class UserAuthenticationFilter extends GenericFilterBean {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-
+    
         String header = httpRequest.getHeader("Authorization");
         logger.debug("Header Authorization: " + header);
-
+    
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7); // Remove "Bearer " prefix
-
-            if (token == null || token.trim().isEmpty()) {
+    
+            if (token.isEmpty()) {
                 logger.warn("Token JWT está vazio");
                 chain.doFilter(request, response);
                 return;
             }
-
+    
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
                     String username = jwtTokenService.pegarToken(token);
-                    if (username == null) {
-                        logger.warn("Nome de usuário não encontrado no token");
-                        chain.doFilter(request, response);
-                        return;
-                    }
-
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                    if (userDetails != null) {
-                        var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    } else {
-                        logger.warn("Detalhes do usuário não encontrados para: " + username);
+    
+                    if (username != null) {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    
+                        if (userDetails != null) {
+                            var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                        } else {
+                            logger.warn("Detalhes do usuário não encontrados para: " + username);
+                        }
                     }
                 } catch (JWTVerificationException e) {
                     logger.error("Erro de verificação de token: " + e.getMessage());
@@ -81,7 +78,7 @@ public class UserAuthenticationFilter extends GenericFilterBean {
         } else {
             logger.warn("Token não encontrado ou inválido no cabeçalho");
         }
-
+    
         chain.doFilter(request, response);
     }
 }

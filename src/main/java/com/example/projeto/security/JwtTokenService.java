@@ -11,6 +11,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.projeto.model.ModelUserDetailsImpl;
 
 @Service
@@ -19,7 +20,7 @@ public class JwtTokenService {
     @Value("${token.jwt.secret.key}")
     private String secretKey;
 
-    @Value("${token.jwt.expiration.hours:2}")  // Adiciona uma configuração de expiração no properties com valor padrão
+    @Value("${jwt.expirationHours}")
     private int expirationHours;
 
     public String generateToken(ModelUserDetailsImpl user) {
@@ -35,21 +36,22 @@ public class JwtTokenService {
         }
     }
 
-    public String pegarToken(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secretKey);
-            return JWT.require(algorithm)
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Token inválido ou expirado!", exception);
-        }
+public String pegarToken(String token) {
+    try {
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        DecodedJWT decodedJWT = JWT.require(algorithm)
+                                   .build()
+                                   .verify(token);
+        return decodedJWT.getSubject(); // Extraia o sujeito (username ou id)
+    } catch (JWTVerificationException e) {
+        throw new RuntimeException("Token invalido ou expirado!", e);
     }
+}
+
 
     private Instant dataExpiracao() {
         return ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"))
-                .plusHours(expirationHours).toInstant();  // Usa a variável de configuração para definir a expiração
+                .plusHours(expirationHours).toInstant();
     }
 
     private Instant dataCriacao() {

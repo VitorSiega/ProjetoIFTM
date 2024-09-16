@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Desabilitando CSRF
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Política de criação de sessão stateless
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/users/**").permitAll() // Permitir requisições abertas para "/api/users/**"
+                    .requestMatchers("/api/users/login", "/api/users/cadastro").permitAll() // Permitir requisições abertas para "/api/users/login" e "/api/users/cadastro"
                     .anyRequest().authenticated()) // Outras requisições precisam estar autenticadas
                 .addFilterBefore(userAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro JWT antes do UsernamePasswordAuthenticationFilter
                 .build();

@@ -26,9 +26,13 @@ public class UserController {
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> salvarUsuario(@RequestBody CreateUserDTO createUserDto) {
-        userService.salvarUsuario(createUserDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping("/cadastro")
+    public ResponseEntity<String> cadastrarUsuario(@RequestBody CreateUserDTO createUserDTO) {
+        try {
+            userService.salvarUsuario(createUserDTO);
+            return ResponseEntity.ok("Usuário cadastrado com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao cadastrar usuário: " + e.getMessage());
+        }
     }
 }
