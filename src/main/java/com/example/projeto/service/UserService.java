@@ -24,20 +24,20 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
     private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService; // Adicione a dependência do RoleService
 
     public UserService(UserRepository userRepository, AuthenticationManager authenticationManager,
-                       JwtTokenService jwtTokenService, PasswordEncoder passwordEncoder) {
+                       JwtTokenService jwtTokenService, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
         this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService; // Inicialize o RoleService
     }
 
     public void salvarUsuario(CreateUserDTO createUserDto) {
-        // Cria a role usando o enum diretamente
-        ModelRole role = ModelRole.builder()
-                .name(createUserDto.role()) // Certifique-se de que role seja um enum
-                .build();
+        // Obtemos ou criamos a role
+        ModelRole role = roleService.getOrCreateRole(createUserDto.role());
 
         // Cria o novo usuário com a role associada
         ModelUser newUser = ModelUser.builder()
