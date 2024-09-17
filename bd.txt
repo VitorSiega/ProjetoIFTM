@@ -8,10 +8,12 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE modeluser (
-    id int primary key auto_increment,
+    id int auto_increment,
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    nome VARCHAR(255) NOT NULL
+    nome VARCHAR(255) NOT NULL,
+    operador INT NOT NULL UNIQUE,
+    primary KEY (id, operador)
 );
 
 CREATE TABLE users_roles (

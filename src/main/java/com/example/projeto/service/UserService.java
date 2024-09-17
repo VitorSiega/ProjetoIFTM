@@ -43,6 +43,7 @@ public class UserService {
                 .email(createUserDto.email())
                 .senha(passwordEncoder.encode(createUserDto.senha()))
                 .nome(createUserDto.nome())
+                .operador(createUserDto.operador())
                 .roles(List.of(role)) // Associa a role ao usuário
                 .build();
         userRepository.save(newUser);
@@ -60,4 +61,5 @@ public class UserService {
         // Gera o JWT token
         return new JwtTokenDTO(jwtTokenService.generateToken(modelUserDetails));
     }
+
 }
