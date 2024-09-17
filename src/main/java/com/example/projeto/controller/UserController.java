@@ -40,9 +40,6 @@ public ResponseEntity<?> loginUsuario(@RequestBody LoginUserDTO loginUserDto) {
     public ResponseEntity<String> cadastrarUsuario(@RequestBody CreateUserDTO createUserDTO) {
 
         try {
-            if(createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
-            }
             
             userService.salvarUsuario(createUserDTO);
             return ResponseEntity.status(201).body(null);
