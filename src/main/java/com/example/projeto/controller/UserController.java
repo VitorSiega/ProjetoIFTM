@@ -38,11 +38,17 @@ public ResponseEntity<?> loginUsuario(@RequestBody LoginUserDTO loginUserDto) {
 
     @PostMapping("/cadastro")
     public ResponseEntity<String> cadastrarUsuario(@RequestBody CreateUserDTO createUserDTO) {
+
         try {
+            if(createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
+            }
+            
             userService.salvarUsuario(createUserDTO);
             return ResponseEntity.status(201).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao cadastrar usuário: " + e.getMessage());
         }
+
     }
 }

@@ -24,10 +24,10 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
     private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService; // Adicione a dependência do RoleService
+    private final RoleService roleService; // Adicione a dependência do RoleServices
 
     public UserService(UserRepository userRepository, AuthenticationManager authenticationManager,
-                       JwtTokenService jwtTokenService, PasswordEncoder passwordEncoder, RoleService roleService) {
+            JwtTokenService jwtTokenService, PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
@@ -38,21 +38,20 @@ public class UserService {
     public void salvarUsuario(CreateUserDTO createUserDto) {
         // Obtemos ou criamos a role
         ModelRole role = roleService.getOrCreateRole(createUserDto.role());
-
         // Cria o novo usuário com a role associada
         ModelUser newUser = ModelUser.builder()
                 .email(createUserDto.email())
                 .senha(passwordEncoder.encode(createUserDto.senha()))
+                .nome(createUserDto.nome())
                 .roles(List.of(role)) // Associa a role ao usuário
                 .build();
-
         userRepository.save(newUser);
     }
 
     public JwtTokenDTO autenticarUsuario(LoginUserDTO loginUserDto) {
         // Cria o token de autenticação
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.senha());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                loginUserDto.email(), loginUserDto.senha());
 
         // Autentica o usuário
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
