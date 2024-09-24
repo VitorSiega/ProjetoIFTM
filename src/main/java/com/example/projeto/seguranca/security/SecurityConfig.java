@@ -1,4 +1,4 @@
-package com.example.projeto.security;
+package com.example.projeto.seguranca.security;
 
 import java.util.Arrays;
 
@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.example.projeto.service.UserDetailsServiceImpl;
+import com.example.projeto.seguranca.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity

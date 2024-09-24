@@ -1,11 +1,11 @@
-package com.example.projeto.service;
+package com.example.projeto.seguranca.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.projeto.enums.Role;
-import com.example.projeto.model.ModelRole;
-import com.example.projeto.repository.RoleRepository;
+import com.example.projeto.seguranca.enums.Role;
+import com.example.projeto.seguranca.model.ModelRole;
+import com.example.projeto.seguranca.repository.RoleRepository;
 
 @Service
 public class RoleService {

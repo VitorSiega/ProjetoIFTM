@@ -1,4 +1,4 @@
-package com.example.projeto.errorStatus;
+package com.example.projeto.seguranca.errorStatus;
 
 public class ErrorResponse {
     private String message;

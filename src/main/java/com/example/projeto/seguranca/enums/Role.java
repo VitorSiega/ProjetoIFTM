@@ -1,4 +1,4 @@
-package com.example.projeto.enums;
+package com.example.projeto.seguranca.enums;
 
 public enum Role {
     RECRUTA,

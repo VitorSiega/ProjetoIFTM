@@ -1,4 +1,4 @@
-package com.example.projeto.service;
+package com.example.projeto.seguranca.service;
 
 import java.util.List;
 
@@ -8,14 +8,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.projeto.dto.CreateUserDTO;
-import com.example.projeto.dto.JwtTokenDTO;
-import com.example.projeto.dto.LoginUserDTO;
-import com.example.projeto.model.ModelRole;
-import com.example.projeto.model.ModelUser;
-import com.example.projeto.model.ModelUserDetailsImpl;
-import com.example.projeto.repository.UserRepository;
-import com.example.projeto.security.JwtTokenService;
+import com.example.projeto.seguranca.dto.CreateUserDTO;
+import com.example.projeto.seguranca.dto.JwtTokenDTO;
+import com.example.projeto.seguranca.dto.LoginUserDTO;
+import com.example.projeto.seguranca.model.ModelRole;
+import com.example.projeto.seguranca.model.ModelUser;
+import com.example.projeto.seguranca.model.ModelUserDetailsImpl;
+import com.example.projeto.seguranca.repository.UserRepository;
+import com.example.projeto.seguranca.security.JwtTokenService;
 
 @Service
 public class UserService {

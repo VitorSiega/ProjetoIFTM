@@ -1,4 +1,4 @@
-package com.example.projeto.model;
+package com.example.projeto.seguranca.model;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

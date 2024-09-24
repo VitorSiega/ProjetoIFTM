@@ -1,4 +1,4 @@
-package com.example.projeto.service;
+package com.example.projeto.seguranca.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,9 +7,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.projeto.model.ModelUser;
-import com.example.projeto.model.ModelUserDetailsImpl;
-import com.example.projeto.repository.UserRepository;
+import com.example.projeto.seguranca.model.ModelUser;
+import com.example.projeto.seguranca.model.ModelUserDetailsImpl;
+import com.example.projeto.seguranca.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

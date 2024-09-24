@@ -1,4 +1,4 @@
-package com.example.projeto.dto;
+package com.example.projeto.seguranca.dto;
 
 import java.util.List;
 
