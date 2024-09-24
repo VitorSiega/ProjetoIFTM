@@ -1,0 +1,29 @@
+create database teste;
+use teste;
+
+
+CREATE TABLE roles (
+    id int primary key auto_increment,
+    name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE modeluser (
+    id int auto_increment,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    operador INT NOT NULL UNIQUE,
+    primary KEY (id, operador)
+);
+
+CREATE TABLE users_roles (
+    user_id int NOT NULL,
+    role_id int NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES modeluser(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
+);
+
+SELECT * FROM users_roles;
+select * from modeluser;
+select * from roles;
