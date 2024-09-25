@@ -62,4 +62,8 @@ public class UserService {
         return new JwtTokenDTO(jwtTokenService.generateToken(modelUserDetails));
     }
 
+    public List<ModelUser> listarLogins(){// retirar depois
+		return userRepository.findAll();
+	}
+
 }

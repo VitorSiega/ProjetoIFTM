@@ -1,9 +1,12 @@
 package com.example.projeto.login.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,7 @@ import com.example.projeto.login.dto.CreateUserDTO;
 import com.example.projeto.login.dto.JwtTokenDTO;
 import com.example.projeto.login.dto.LoginUserDTO;
 import com.example.projeto.login.errorStatus.ErrorResponse;
+import com.example.projeto.login.model.ModelUser;
 import com.example.projeto.login.repository.UserRepository;
 import com.example.projeto.login.service.UserService;
 
@@ -42,7 +46,6 @@ public class UserController {
 
     @PostMapping("/cadastro")
     public ResponseEntity<String> cadastrarUsuario(@RequestBody CreateUserDTO createUserDTO) {
-
         try {
             if (createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
@@ -61,6 +64,10 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao cadastrar usuário: " + e.getMessage());
         }
-
     }
+
+    @GetMapping("/listar") // retirar depois
+	public ResponseEntity<List<ModelUser>> listarUsuarios(){
+		return ResponseEntity.status(200).body(userService.listarLogins());
+	}
 }
