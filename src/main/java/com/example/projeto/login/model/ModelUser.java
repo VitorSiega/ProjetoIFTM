@@ -1,4 +1,4 @@
-package com.example.projeto.seguranca.model;
+package com.example.projeto.login.model;
 
 import java.io.Serializable;
 import java.util.List;

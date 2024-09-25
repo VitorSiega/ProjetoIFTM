@@ -1,4 +1,4 @@
-package com.example.projeto.seguranca.config;
+package com.example.projeto.login.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

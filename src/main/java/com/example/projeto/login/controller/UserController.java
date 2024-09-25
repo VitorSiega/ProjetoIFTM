@@ -1,4 +1,4 @@
-package com.example.projeto.seguranca.controller;
+package com.example.projeto.login.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.projeto.seguranca.dto.CreateUserDTO;
-import com.example.projeto.seguranca.dto.JwtTokenDTO;
-import com.example.projeto.seguranca.dto.LoginUserDTO;
-import com.example.projeto.seguranca.errorStatus.ErrorResponse;
-import com.example.projeto.seguranca.repository.UserRepository;
-import com.example.projeto.seguranca.service.UserService;
+import com.example.projeto.login.dto.CreateUserDTO;
+import com.example.projeto.login.dto.JwtTokenDTO;
+import com.example.projeto.login.dto.LoginUserDTO;
+import com.example.projeto.login.errorStatus.ErrorResponse;
+import com.example.projeto.login.repository.UserRepository;
+import com.example.projeto.login.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")

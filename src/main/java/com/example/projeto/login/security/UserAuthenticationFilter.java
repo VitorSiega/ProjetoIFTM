@@ -1,4 +1,4 @@
-package com.example.projeto.seguranca.security;
+package com.example.projeto.login.security;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.example.projeto.seguranca.service.UserDetailsServiceImpl;
+import com.example.projeto.login.service.UserDetailsServiceImpl;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

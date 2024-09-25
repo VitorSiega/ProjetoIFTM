@@ -1,6 +1,6 @@
-package com.example.projeto.seguranca.model;
+package com.example.projeto.login.model;
 
-import com.example.projeto.seguranca.enums.Role;
+import com.example.projeto.login.enums.Role;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
