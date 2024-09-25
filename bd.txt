@@ -27,3 +27,11 @@ CREATE TABLE users_roles (
 SELECT * FROM users_roles;
 select * from modeluser;
 select * from roles;
+
+
+--------------------------------------
+Server: sql10.freemysqlhosting.net
+Name: sql10733005
+Username: sql10733005
+Password: hYpPrybjJe
+Port number: 3306
