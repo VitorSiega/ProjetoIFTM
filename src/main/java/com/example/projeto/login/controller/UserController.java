@@ -1,6 +1,7 @@
 package com.example.projeto.login.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,32 +74,31 @@ public class UserController {
     @PutMapping("/atualizar/{id}")
     public ResponseEntity<String> atualizarUsuario(@PathVariable Long id, @RequestBody CreateUserDTO createUserDTO) {
         try {
-            if (createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty()) {
+            if (userRepository.findById(id).isEmpty())
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não encontrado");
+            if (createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty())
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
-            }
-            if (userRepository.findByEmail(createUserDTO.email()).isPresent()) {
+            Optional<ModelUser> userExistente = userRepository.findByEmail(createUserDTO.email());
+            if (userExistente.isPresent() && !userExistente.get().getId().equals(id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Já existe uma pessoa usando esse email e senha!");
+                        .body("Já existe uma pessoa usando esse email");
             }
-            if (createUserDTO.operador() <= 0) {
+            if (createUserDTO.operador() <= 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
-            }
-            if (userRepository.findByOperador(createUserDTO.operador()).isPresent()) {
+            if (userRepository.findByOperador(createUserDTO.operador()).isPresent())
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Operador ja existente");
-            }
             userService.atualizarUsuario(id, createUserDTO);
-            return ResponseEntity.status(201).body(null);
+            return ResponseEntity.status(200).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao cadastrar usuário: " + e.getMessage());
         }
     }
 
     @DeleteMapping("/remover/{id}")
-    public ResponseEntity<String> removerUsuario(@PathVariable Long id){
+    public ResponseEntity<String> removerUsuario(@PathVariable Long id) {
         userService.removerUsuario(id);
         return ResponseEntity.status(200).body(null);
     }
-
 
     @GetMapping("/listar") // retirar depois
     public ResponseEntity<List<ModelUser>> listarUsuarios() {

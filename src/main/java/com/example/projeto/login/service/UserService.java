@@ -26,7 +26,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
     private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService; // Adicione a dependência do RoleServices
+    private final RoleService roleService;
 
     public UserService(UserRepository userRepository, AuthenticationManager authenticationManager,
             JwtTokenService jwtTokenService, PasswordEncoder passwordEncoder, RoleService roleService) {
@@ -34,7 +34,7 @@ public class UserService {
         this.authenticationManager = authenticationManager;
         this.jwtTokenService = jwtTokenService;
         this.passwordEncoder = passwordEncoder;
-        this.roleService = roleService; // Inicialize o RoleService
+        this.roleService = roleService;
     }
 
     public void salvarUsuario(CreateUserDTO createUserDto) {
@@ -66,16 +66,14 @@ public class UserService {
         // Carrega o usuário do banco
         ModelUser userAtual = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-
         // Atualiza os campos do usuário
         userAtual.setEmail(updateUserDTO.email());
         userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
         userAtual.setNome(updateUserDTO.nome());
-
+        userAtual.setOperador(updateUserDTO.operador());
         // Atualiza as roles
         userAtual.getRoles().clear(); // Remove as roles antigas
         userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role())); // Adiciona a nova role
-
         // Persiste as alterações
         userRepository.save(userAtual);
     }
@@ -83,10 +81,8 @@ public class UserService {
     public void removerUsuario(Long id){
         userRepository.deleteById(id);
     }
-
-
+    
     public List<ModelUser> listarLogins() {// retirar depois
         return userRepository.findAll();
     }
-
 }
