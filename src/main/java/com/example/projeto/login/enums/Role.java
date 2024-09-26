@@ -1,7 +1,7 @@
 package com.example.projeto.login.enums;
 
 public enum Role {
-    RECRUTA,
+    ADMINISTRADOR,
     OPERADOR,
-    ADMINISTRADOR
+    RECRUTA
 }

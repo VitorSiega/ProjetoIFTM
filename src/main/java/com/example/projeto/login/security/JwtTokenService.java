@@ -3,8 +3,11 @@ package com.example.projeto.login.security;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -23,18 +26,40 @@ public class JwtTokenService {
     @Value("${jwt.expirationHours}")
     private int expirationHours;
 
-    public String generateToken(ModelUserDetailsImpl user) {
+    /*public String generateToken(ModelUserDetailsImpl user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
             return JWT.create()
                     .withIssuedAt(dataCriacao())
                     .withExpiresAt(dataExpiracao())
                     .withSubject(user.getUsername())
+                    .withClaim("roles", role)
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro ao gerar o token: " + exception.getMessage(), exception);
         }
+    }*/
+
+    public String generateToken(ModelUserDetailsImpl user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
+    
+            // Obter as roles como uma lista de Strings
+            List<String> roles = user.getAuthorities().stream()
+                                     .map(GrantedAuthority::getAuthority)
+                                     .collect(Collectors.toList());
+    
+            return JWT.create()
+                    .withIssuedAt(dataCriacao())
+                    .withExpiresAt(dataExpiracao())  // 1 dia de expiração
+                    .withSubject(user.getUsername())          // nome de usuário (subject)
+                    .withClaim("roles", roles)                // Adicionar roles ao payload
+                    .sign(algorithm);                         // assinar o token
+        } catch (JWTCreationException exception) {
+            throw new RuntimeException("Erro ao gerar o token: " + exception.getMessage(), exception);
+        }
     }
+    
 
 public String pegarToken(String token) {
     try {
