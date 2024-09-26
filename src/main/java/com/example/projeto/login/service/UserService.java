@@ -17,6 +17,8 @@ import com.example.projeto.login.model.ModelUserDetailsImpl;
 import com.example.projeto.login.repository.UserRepository;
 import com.example.projeto.login.security.JwtTokenService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 
@@ -53,17 +55,38 @@ public class UserService {
         // Cria o token de autenticação
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginUserDto.email(), loginUserDto.senha());
-
         // Autentica o usuário
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         ModelUserDetailsImpl modelUserDetails = (ModelUserDetailsImpl) authentication.getPrincipal();
-
         // Gera o JWT token
         return new JwtTokenDTO(jwtTokenService.generateToken(modelUserDetails));
     }
 
-    public List<ModelUser> listarLogins(){// retirar depois
-		return userRepository.findAll();
-	}
+    public void atualizarUsuario(Long id, CreateUserDTO updateUserDTO) {
+        // Carrega o usuário do banco
+        ModelUser userAtual = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+
+        // Atualiza os campos do usuário
+        userAtual.setEmail(updateUserDTO.email());
+        userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
+        userAtual.setNome(updateUserDTO.nome());
+
+        // Atualiza as roles
+        userAtual.getRoles().clear(); // Remove as roles antigas
+        userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role())); // Adiciona a nova role
+
+        // Persiste as alterações
+        userRepository.save(userAtual);
+    }
+
+    public void removerUsuario(Long id){
+        userRepository.deleteById(id);
+    }
+
+
+    public List<ModelUser> listarLogins() {// retirar depois
+        return userRepository.findAll();
+    }
 
 }

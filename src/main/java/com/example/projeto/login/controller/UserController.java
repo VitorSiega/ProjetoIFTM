@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +54,8 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
             }
             if (userRepository.findByEmail(createUserDTO.email()).isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Já existe uma pessoa usando esse email e senha!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Já existe uma pessoa usando esse email e senha!");
             }
             if (createUserDTO.operador() <= 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
@@ -66,8 +70,38 @@ public class UserController {
         }
     }
 
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<String> atualizarUsuario(@PathVariable Long id, @RequestBody CreateUserDTO createUserDTO) {
+        try {
+            if (createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
+            }
+            if (userRepository.findByEmail(createUserDTO.email()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Já existe uma pessoa usando esse email e senha!");
+            }
+            if (createUserDTO.operador() <= 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
+            }
+            if (userRepository.findByOperador(createUserDTO.operador()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Operador ja existente");
+            }
+            userService.atualizarUsuario(id, createUserDTO);
+            return ResponseEntity.status(201).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao cadastrar usuário: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/remover/{id}")
+    public ResponseEntity<String> removerUsuario(@PathVariable Long id){
+        userService.removerUsuario(id);
+        return ResponseEntity.status(200).body(null);
+    }
+
+
     @GetMapping("/listar") // retirar depois
-	public ResponseEntity<List<ModelUser>> listarUsuarios(){
-		return ResponseEntity.status(200).body(userService.listarLogins());
-	}
+    public ResponseEntity<List<ModelUser>> listarUsuarios() {
+        return ResponseEntity.status(200).body(userService.listarLogins());
+    }
 }

@@ -29,7 +29,6 @@ public class ModelUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
 
     private String email;
     private String senha;
@@ -39,5 +38,4 @@ public class ModelUser implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name="users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name="role_id"))
     private List<ModelRole> roles;
-  
 }
