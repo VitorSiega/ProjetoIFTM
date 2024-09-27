@@ -57,7 +57,8 @@ public class SecurityConfig {
                     "/api/users/admin/cadastro",
                     "/api/users/admin/atualizar/{id}",
                     "/api/users/admin/remover/{id}",
-                    "/api/users/admin/listar"
+                    "/api/users/admin/listar",
+                    "/api/admin/presenca"
                     ).permitAll()
                     
                     .requestMatchers("/api/**").authenticated() // Protege as rotas da API
