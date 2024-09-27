@@ -48,17 +48,17 @@ public class UserController {
         }
     }
 
-    @PostMapping("/cadastro")
+    @PostMapping("/admin/cadastro")
     public ResponseEntity<String> cadastrarUsuario(@RequestBody CreateUserDTO createUserDTO) {
         try {
-            if (createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty()) 
+            if (createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty())
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
-            if (userRepository.findByEmail(createUserDTO.email()).isPresent()) 
+            if (userRepository.findByEmail(createUserDTO.email()).isPresent())
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Já existe uma pessoa usando esse email e senha!");
-            if (createUserDTO.operador() <= 0) 
+                        .body("Já existe uma pessoa usando esse email e senha!");
+            if (createUserDTO.operador() <= 0)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
-            if (userRepository.findByOperador(createUserDTO.operador()).isPresent()) 
+            if (userRepository.findByOperador(createUserDTO.operador()).isPresent())
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Operador ja existente");
             userService.salvarUsuario(createUserDTO);
             return ResponseEntity.status(201).body(null);
@@ -67,7 +67,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/atualizar/{id}")
+    @PutMapping("/admin/atualizar/{id}")
     public ResponseEntity<String> atualizarUsuario(@PathVariable Long id, @RequestBody CreateUserDTO createUserDTO) {
         try {
             if (userRepository.findById(id).isEmpty())
@@ -90,13 +90,15 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/remover/{id}")
+    @DeleteMapping("/admin/remover/{id}")
     public ResponseEntity<String> removerUsuario(@PathVariable Long id) {
-        userService.removerUsuario(id);
-        return ResponseEntity.status(200).body(null);
+        if (userService.removerUsuario(id))
+            return ResponseEntity.status(200).body(null);
+            else
+                return ResponseEntity.status(500).body("Usuário não encontrado");
     }
 
-    @GetMapping("/listar") // retirar depois
+    @GetMapping("/admin/listar") // retirar depois
     public ResponseEntity<List<ModelUser>> listarUsuarios() {
         return ResponseEntity.status(200).body(userService.listarLogins());
     }

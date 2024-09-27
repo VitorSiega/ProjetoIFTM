@@ -78,8 +78,12 @@ public class UserService {
         userRepository.save(userAtual);
     }
 
-    public void removerUsuario(Long id){
-        userRepository.deleteById(id);
+    public boolean removerUsuario(Long id){
+        if(userRepository.findById(id).isPresent()){
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
     
     public List<ModelUser> listarLogins() {// retirar depois
