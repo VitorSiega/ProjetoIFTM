@@ -1,10 +1,13 @@
-package com.example.projeto.security;
+package com.example.projeto.login.security;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -12,7 +15,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.projeto.model.ModelUserDetailsImpl;
+import com.example.projeto.login.model.ModelUserDetailsImpl;
 
 @Service
 public class JwtTokenService {
@@ -26,15 +29,21 @@ public class JwtTokenService {
     public String generateToken(ModelUserDetailsImpl user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
+            // Obter as roles como uma lista de Strings
+            List<String> roles = user.getAuthorities().stream()
+                                     .map(GrantedAuthority::getAuthority)
+                                     .collect(Collectors.toList());
             return JWT.create()
                     .withIssuedAt(dataCriacao())
-                    .withExpiresAt(dataExpiracao())
-                    .withSubject(user.getUsername())
-                    .sign(algorithm);
+                    .withExpiresAt(dataExpiracao())// 1 dia de expiração
+                    .withSubject(user.getUsername())// nome de usuário (subject)
+                    .withClaim("roles", roles)// Adicionar roles ao payload
+                    .sign(algorithm);// assinar o token
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro ao gerar o token: " + exception.getMessage(), exception);
         }
     }
+    
 
 public String pegarToken(String token) {
     try {
@@ -47,7 +56,6 @@ public String pegarToken(String token) {
         throw new RuntimeException("Token invalido ou expirado!", e);
     }
 }
-
 
     private Instant dataExpiracao() {
         return ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"))

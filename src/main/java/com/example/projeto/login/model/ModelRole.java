@@ -1,6 +1,6 @@
-package com.example.projeto.model;
+package com.example.projeto.login.model;
 
-import com.example.projeto.enums.Role;  // Importe o enum Role corretamente
+import com.example.projeto.login.enums.Role;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
