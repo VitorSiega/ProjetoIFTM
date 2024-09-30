@@ -25,7 +25,7 @@ import com.example.projeto.login.repository.UserRepository;
 import com.example.projeto.login.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -33,7 +33,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ResponseEntity<?> loginUsuario(@RequestBody LoginUserDTO loginUserDto) {
         try {
             JwtTokenDTO token = userService.autenticarUsuario(loginUserDto);

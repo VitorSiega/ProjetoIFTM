@@ -24,14 +24,15 @@ CREATE TABLE users_roles (
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
+CREATE TABLE presencas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    data DATE NOT NULL,
+    status VARCHAR(10),
+	FOREIGN KEY (user_id) REFERENCES modeluser(id) ON DELETE CASCADE
+);
+
 SELECT * FROM users_roles;
 select * from modeluser;
 select * from roles;
-
-
---------------------------------------
-Server: sql10.freemysqlhosting.net
-Name: sql10733005
-Username: sql10733005
-Password: hYpPrybjJe
-Port number: 3306
+select * from presencas;

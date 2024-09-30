@@ -41,28 +41,18 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Política de criação de sessão stateless
                 .authorizeHttpRequests(auth -> auth
-                //FAZER AS PERMISSÕES DE ROLES
+                    // voltar isso depois que assim a segurança ta desabilitada
+                    // .requestMatchers(
+                    // "/api/users/admin/**"
+                    // ).hasAuthority("ADMINISTRADOR")
 
-                    //permissões de rota por role
-                    .requestMatchers(
-                    "/api/users/admin/cadastro",
-                    "/api/users/admin/atualizar/{id}",
-                    "/api/users/admin/remover/{id}",
-                    "/api/users/admin/listar"
-                    ).hasAuthority("ADMINISTRADOR")
-
-                    //permissões gerais das rotas
-                    .requestMatchers(
-                    "/api/users/login",
-                    "/api/users/admin/cadastro",
-                    "/api/users/admin/atualizar/{id}",
-                    "/api/users/admin/remover/{id}",
-                    "/api/users/admin/listar",
-                    "/api/admin/presenca"
-                    ).permitAll()
+                    // .requestMatchers(
+                    // "/api/users/login",
+                    // "/api/users/cadastro"
+                    // ).permitAll()
                     
-                    .requestMatchers("/api/**").authenticated() // Protege as rotas da API
-                    .anyRequest().permitAll()) // Permite qualquer outra rota (ajuste conforme necessário)
+                    // .requestMatchers("/api/**").authenticated()
+                    .anyRequest().permitAll())
                 .addFilterBefore(userAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro JWT antes do filtro de autenticação padrão
                 .build();
     }
