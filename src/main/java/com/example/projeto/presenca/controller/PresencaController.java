@@ -24,8 +24,8 @@ public class PresencaController {
     PresencaService presencaService;
 
     @PostMapping("/admin/lancar/presenca")
-    public ResponseEntity<?> registrarPresenca(@RequestParam("buscarPresencaData") LocalDate dataBuscar, @RequestBody List<PresencaDTO> presencaDTO) {
-        presencaService.registrarPresenca(dataBuscar, presencaDTO);
+    public ResponseEntity<?> registrarPresenca(@RequestBody List<PresencaDTO> presencaDTO) {
+        presencaService.registrarPresenca(presencaDTO);
         return ResponseEntity.status(200).body(null);
     }
 

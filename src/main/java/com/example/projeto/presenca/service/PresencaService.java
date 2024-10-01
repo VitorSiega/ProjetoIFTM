@@ -29,7 +29,7 @@ public class PresencaService {
         this.userRepository = userRepository;
     }
 
-    public void registrarPresenca(LocalDate dataAtualizacao, List<PresencaDTO> listaAtualizar) {
+    public void registrarPresenca(List<PresencaDTO> listaAtualizar) {
         listaAtualizar.forEach(list -> {
             PresencaModel presenca = presenceRepository.findById(list.id())
                     .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
