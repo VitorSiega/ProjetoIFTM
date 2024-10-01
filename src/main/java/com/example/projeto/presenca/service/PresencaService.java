@@ -17,33 +17,34 @@ import com.example.projeto.presenca.repository.PresencaRepository;
 public class PresencaService {
 
     @Autowired
-    private PresencaRepository presencaRepository;
+    private final PresencaRepository presenceRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public PresencaService(PresencaRepository presencaRepository, UserRepository userRepository) {
-        this.presencaRepository = presencaRepository;
+        this.presenceRepository = presencaRepository;
         this.userRepository = userRepository;
     }
 
-    public void registrarPresenca(List<PresencaDTO> presencaDTO){
+    public void registrarPresenca(List<PresencaDTO> presencaDTO) {
         List<PresencaModel> listaPresenca = new ArrayList<>();
 
         presencaDTO.forEach(presenca -> {
             ModelUser user = userRepository.findById(presenca.userId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+                    .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
             PresencaModel presencaModelNew = PresencaModel.builder()
-            .user(user)
-            .data(presenca.data())
-            .status(presenca.status())
-            .build();
+                    .user(user)
+                    .data(presenca.data())
+                    .status(presenca.status())
+                    .build();
             listaPresenca.add(presencaModelNew);
         });
-        presencaRepository.saveAll(listaPresenca);
+        presenceRepository.saveAll(listaPresenca);
     }
-    
+
     public List<PresencaModel> buscarPresenca(LocalDate dataBuscar) {
-        return presencaRepository.findByData(dataBuscar);
+        return presenceRepository.findByData(dataBuscar);
     }
 }

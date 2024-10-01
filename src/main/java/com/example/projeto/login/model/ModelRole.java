@@ -29,7 +29,6 @@ public class ModelRole {
     @Enumerated(EnumType.STRING)  // Especifica que o enum será armazenado como string no banco de dados
     private Role name;  // Agora usa o enum Role
 
-
     public Long getId() {
         return this.id;
     }

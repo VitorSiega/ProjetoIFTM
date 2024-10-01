@@ -9,6 +9,8 @@ import com.example.projeto.login.model.ModelUser;
 
 @Repository
 public interface UserRepository extends JpaRepository<ModelUser, Long> {
+
     Optional<ModelUser> findByEmail(String email);
+
     Optional<ModelUser> findByOperador(int operador);
 }

@@ -41,18 +41,18 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Política de criação de sessão stateless
                 .authorizeHttpRequests(auth -> auth
-                    // voltar isso depois que assim a segurança ta desabilitada
-                    // .requestMatchers(
-                    // "/api/users/admin/**"
-                    // ).hasAuthority("ADMINISTRADOR")
+                // voltar isso depois que assim a segurança ta desabilitada
+                // .requestMatchers(
+                // "/api/users/admin/**"
+                // ).hasAuthority("ADMINISTRADOR")
 
-                    // .requestMatchers(
-                    // "/api/users/login",
-                    // "/api/users/cadastro"
-                    // ).permitAll()
-                    
-                    // .requestMatchers("/api/**").authenticated()
-                    .anyRequest().permitAll())
+                // .requestMatchers(
+                // "/api/users/login",
+                // "/api/users/cadastro"
+                // ).permitAll()
+
+                // .requestMatchers("/api/**").authenticated()
+                .anyRequest().permitAll())
                 .addFilterBefore(userAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro JWT antes do filtro de autenticação padrão
                 .build();
     }
@@ -65,7 +65,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Cabeçalhos permitidos
         configuration.setAllowCredentials(true); // Permite credenciais (cookies, headers de autorização)
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Aplica CORS globalmente
         return source;

@@ -14,27 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.projeto.presenca.dto.PresencaDTO;
 import com.example.projeto.presenca.model.PresencaModel;
-import com.example.projeto.presenca.repository.PresencaRepository;
 import com.example.projeto.presenca.service.PresencaService;
-
-
-
 
 @RestController
 @RequestMapping("/api")
 public class PresencaController {
-    
-    @Autowired
-    PresencaRepository presencaRepository;
+
     @Autowired
     PresencaService presencaService;
-    
-    LocalDate dataAtual = LocalDate.now();
 
     @PostMapping("/admin/presenca")
-    public ResponseEntity<?> registrarPresenca(@RequestBody List <PresencaDTO> presencaDTO) {
-         presencaService.registrarPresenca(presencaDTO);
-         return ResponseEntity.status(201).body(null);
+    public ResponseEntity<?> registrarPresenca(@RequestBody List<PresencaDTO> presencaDTO) {
+        presencaService.registrarPresenca(presencaDTO);
+        return ResponseEntity.status(201).body(null);
     }
 
     @GetMapping("/admin/listar/presenca")
@@ -42,6 +34,5 @@ public class PresencaController {
         List<PresencaModel> presencas = presencaService.buscarPresenca(dataBuscar);
         return ResponseEntity.ok(presencas);
     }
-    
-    
+
 }

@@ -1,6 +1,5 @@
 package com.example.projeto.presenca.model;
 
-
 import java.time.LocalDate;
 
 import com.example.projeto.login.model.ModelUser;
@@ -24,17 +23,17 @@ import lombok.NoArgsConstructor;
 @Table(name = "presencas")
 @Entity
 public class PresencaModel {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name = "user_id")  // Nome correto da coluna de chave estrangeira
     private ModelUser user;
 
     private LocalDate data;  // Data da presença
-    
+
     private String status;   // "Presente" ou "Falta"
 
 }

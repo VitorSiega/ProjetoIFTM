@@ -31,8 +31,8 @@ public class JwtTokenService {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
             // Obter as roles como uma lista de Strings
             List<String> roles = user.getAuthorities().stream()
-                                     .map(GrantedAuthority::getAuthority)
-                                     .collect(Collectors.toList());
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
             return JWT.create()
                     .withIssuedAt(dataCriacao())
                     .withExpiresAt(dataExpiracao())// 1 dia de expiração
@@ -43,19 +43,18 @@ public class JwtTokenService {
             throw new RuntimeException("Erro ao gerar o token: " + exception.getMessage(), exception);
         }
     }
-    
 
-public String pegarToken(String token) {
-    try {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        DecodedJWT decodedJWT = JWT.require(algorithm)
-                                   .build()
-                                   .verify(token);
-        return decodedJWT.getSubject(); // Extraia o sujeito (username ou id)
-    } catch (JWTVerificationException e) {
-        throw new RuntimeException("Token invalido ou expirado!", e);
+    public String pegarToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
+            DecodedJWT decodedJWT = JWT.require(algorithm)
+                    .build()
+                    .verify(token);
+            return decodedJWT.getSubject(); // Extraia o sujeito (username ou id)
+        } catch (JWTVerificationException e) {
+            throw new RuntimeException("Token invalido ou expirado!", e);
+        }
     }
-}
 
     private Instant dataExpiracao() {
         return ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"))
