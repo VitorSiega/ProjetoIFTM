@@ -23,10 +23,10 @@ public class PresencaController {
     @Autowired
     PresencaService presencaService;
 
-    @PostMapping("/admin/presenca")
-    public ResponseEntity<?> registrarPresenca(@RequestBody List<PresencaDTO> presencaDTO) {
-        presencaService.registrarPresenca(presencaDTO);
-        return ResponseEntity.status(201).body(null);
+    @PostMapping("/admin/lancar/presenca")
+    public ResponseEntity<?> registrarPresenca(@RequestParam("buscarPresencaData") LocalDate dataBuscar, @RequestBody List<PresencaDTO> presencaDTO) {
+        presencaService.registrarPresenca(dataBuscar, presencaDTO);
+        return ResponseEntity.status(200).body(null);
     }
 
     @GetMapping("/admin/listar/presenca")

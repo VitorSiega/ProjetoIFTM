@@ -13,6 +13,8 @@ import com.example.projeto.presenca.dto.PresencaDTO;
 import com.example.projeto.presenca.model.PresencaModel;
 import com.example.projeto.presenca.repository.PresencaRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class PresencaService {
 
@@ -27,24 +29,34 @@ public class PresencaService {
         this.userRepository = userRepository;
     }
 
-    public void registrarPresenca(List<PresencaDTO> presencaDTO) {
-        List<PresencaModel> listaPresenca = new ArrayList<>();
-
-        presencaDTO.forEach(presenca -> {
-            ModelUser user = userRepository.findById(presenca.userId())
-                    .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-
-            PresencaModel presencaModelNew = PresencaModel.builder()
-                    .user(user)
-                    .data(presenca.data())
-                    .status(presenca.status())
-                    .build();
-            listaPresenca.add(presencaModelNew);
+    public void registrarPresenca(LocalDate dataAtualizacao, List<PresencaDTO> listaAtualizar) {
+        listaAtualizar.forEach(list -> {
+            PresencaModel presenca = presenceRepository.findById(list.id())
+                    .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+            presenca.setStatus(list.status());
+            presenceRepository.save(presenca);
         });
-        presenceRepository.saveAll(listaPresenca);
     }
 
-    public List<PresencaModel> buscarPresenca(LocalDate dataBuscar) {
-        return presenceRepository.findByData(dataBuscar);
+    public List<PresencaModel> buscarPresenca(LocalDate dataDoLancamento) {
+
+        if (presenceRepository.findByData(dataDoLancamento).isEmpty()) {
+            List<PresencaModel> gerarLista = new ArrayList<>();
+            List<ModelUser> receberUsuarios = userRepository.findAll();
+
+            receberUsuarios.forEach(usuario -> {
+                PresencaModel listaGerada = PresencaModel.builder()
+                        .user(usuario)
+                        .data(dataDoLancamento)
+                        .status("falta")
+                        .build();
+                gerarLista.add(listaGerada);
+            });
+            presenceRepository.saveAll(gerarLista);
+            return gerarLista;
+        } else {
+            return presenceRepository.findByData(dataDoLancamento);
+        }
     }
+
 }

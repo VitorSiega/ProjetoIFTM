@@ -12,4 +12,5 @@ import com.example.projeto.presenca.model.PresencaModel;
 public interface PresencaRepository extends JpaRepository<PresencaModel, Long> {
 
     List<PresencaModel> findByData(LocalDate data);
+
 }
