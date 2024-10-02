@@ -15,7 +15,7 @@ public class RoleService {
 
     public ModelRole getOrCreateRole(Role roleName) {
         return roleRepository.findByName(roleName)
-            .orElseGet(() -> roleRepository.save(new ModelRole(null, roleName)));
+                .orElseGet(() -> roleRepository.save(new ModelRole(null, roleName)));
     }
 
 }
