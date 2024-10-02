@@ -1,6 +1,7 @@
 package com.example.projeto.presenca.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,16 @@ public class PresencaController {
 
     @PutMapping("/admin/lancar/presenca")
     public ResponseEntity<?> registrarPresenca(@RequestBody List<PresencaDTO> presencaDTO) {
-        presencaService.registrarPresenca(presencaDTO);
+
+        List<PresencaDTO> listaReduzida = new ArrayList<>();
+
+        presencaDTO.forEach(list -> {
+            if (list.status().equals("presente")) {
+                listaReduzida.add(list);
+            }
+        });
+
+        presencaService.registrarPresenca(listaReduzida);
         return ResponseEntity.status(200).body(null);
     }
 

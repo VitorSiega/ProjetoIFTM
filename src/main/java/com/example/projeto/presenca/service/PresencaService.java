@@ -39,7 +39,6 @@ public class PresencaService {
     }
 
     public List<PresencaModel> buscarPresenca(LocalDate dataDoLancamento) {
-
         if (presenceRepository.findByData(dataDoLancamento).isEmpty()) {
             List<PresencaModel> gerarLista = new ArrayList<>();
             List<ModelUser> receberUsuarios = userRepository.findAll();
@@ -58,5 +57,4 @@ public class PresencaService {
             return presenceRepository.findByData(dataDoLancamento);
         }
     }
-
 }
