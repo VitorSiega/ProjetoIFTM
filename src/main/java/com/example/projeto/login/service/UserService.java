@@ -44,8 +44,14 @@ public class UserService {
         ModelUser newUser = ModelUser.builder()
                 .email(createUserDto.email())
                 .senha(passwordEncoder.encode(createUserDto.senha()))
-                .nome(createUserDto.nome())
                 .operador(createUserDto.operador())
+                .nome(createUserDto.nome())
+                .cpf(createUserDto.cpf())
+                .dataNascimento(createUserDto.dataNascimento())
+                .telefone(createUserDto.telefone())
+                .telefoneEmergencia(createUserDto.telefoneEmergencia())
+                .tipoSanguineo(createUserDto.tipoSanguineo())
+                .ocupacao(createUserDto.ocupacao())
                 .roles(List.of(role)) // Associa a role ao usuário
                 .build();
         userRepository.save(newUser);
@@ -69,8 +75,14 @@ public class UserService {
         // Atualiza os campos do usuário
         userAtual.setEmail(updateUserDTO.email());
         userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
-        userAtual.setNome(updateUserDTO.nome());
         userAtual.setOperador(updateUserDTO.operador());
+        userAtual.setNome(updateUserDTO.nome());
+        userAtual.setCpf(updateUserDTO.cpf());
+        userAtual.setDataNascimento(updateUserDTO.dataNascimento());
+        userAtual.setTelefone(updateUserDTO.telefone());
+        userAtual.setTelefoneEmergencia(updateUserDTO.telefoneEmergencia());
+        userAtual.setTipoSanguineo(updateUserDTO.tipoSanguineo());
+        userAtual.setOcupacao(updateUserDTO.ocupacao());
         // Atualiza as roles
         userAtual.getRoles().clear(); // Remove as roles antigas
         userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role())); // Adiciona a nova role

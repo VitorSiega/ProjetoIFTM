@@ -1,5 +1,5 @@
-create database teste;
-use teste;
+create database bd_ftpa;
+use bd_ftpa;
 
 
 CREATE TABLE roles (
@@ -13,7 +13,13 @@ CREATE TABLE modeluser (
     senha VARCHAR(255) NOT NULL,
     nome VARCHAR(255) NOT NULL,
     operador INT NOT NULL UNIQUE,
-    primary KEY (id, operador)
+    cpf VARCHAR(14) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    telefone VARCHAR(15) NOT NULL,
+    telefone_emergencia VARCHAR(15),
+    tipo_sanguineo VARCHAR(3),
+    ocupacao VARCHAR(100),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE users_roles (
