@@ -1,6 +1,6 @@
 package com.example.projeto.login.webhook.webhookController;
 
-import java.io.File;
+import java.io.IOException;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,30 +11,24 @@ public class WebhookController {
 
     @PostMapping("/webhook")
     public void handleWebhook(@RequestBody String payload) {
-        executePullAndBuild();
+        executeDeployScript();
     }
 
-    private void executePullAndBuild() {
+    private void executeDeployScript() {
         try {
-            ProcessBuilder pullProcessBuilder = new ProcessBuilder("git", "-C", "/home/ProjetoIFTM", "pull");
-            pullProcessBuilder.inheritIO();
-            Process pullProcess = pullProcessBuilder.start();
-            pullProcess.waitFor();
+            // Define o caminho do script
+            String scriptPath = "/home/webhook/deploy.sh";
 
-            ProcessBuilder mvnProcessBuilder = new ProcessBuilder("mvn", "-C", "/home/ProjetoIFTM", "clean", "package");
-            mvnProcessBuilder.inheritIO();
-            Process mvnProcess = mvnProcessBuilder.start();
-            mvnProcess.waitFor();
+            // Cria um ProcessBuilder para executar o script
+            ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
+            processBuilder.inheritIO(); // Para herdar a entrada e saída do processo
+            Process process = processBuilder.start(); // Inicia o processo
+            process.waitFor(); // Aguarda a conclusão do processo
 
-            File newJar = new File("/home/ProjetoIFTM/target/projeto-0.0.1-SNAPSHOT.jar");
-            File existingJar = new File("/home/projeto-0.0.1-SNAPSHOT.jar");
-
-            if (newJar.exists()) {
-                if (existingJar.delete()) {
-                    newJar.renameTo(existingJar);
-                }
-            }
-        } catch (Exception e) {
+            // Aqui você pode adicionar qualquer lógica adicional se necessário
+        } catch (IOException | InterruptedException e) {
+            // Tratar exceções conforme necessário
+            e.printStackTrace();
         }
     }
 }
