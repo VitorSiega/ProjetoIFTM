@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-@Table(name = "users")
+@Table(name = "user")
 @Entity
 public class ModelUser implements Serializable {
 
@@ -37,7 +37,7 @@ public class ModelUser implements Serializable {
     private String email;
     @Column(name = "senha", nullable = false, columnDefinition = "VARCHAR(255)")
     private String senha;
-    @Column(name = "operador", columnDefinition = "INT")
+    @Column(name = "operador", nullable = false, columnDefinition = "INTEGER")
     private Integer operador;
     @Column(name = "nome", nullable = false, columnDefinition = "VARCHAR(255)")
     private String nome;
