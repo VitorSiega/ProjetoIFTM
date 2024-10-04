@@ -1,9 +1,11 @@
 package com.example.projeto.login.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,20 +24,40 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-@Table(name = "modeluser")
+@Table(name = "users")
 @Entity
 public class ModelUser implements Serializable {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "email", nullable = false, unique = true, columnDefinition = "VARCHAR(255)")
     private String email;
+    @Column(name = "senha", nullable = false, columnDefinition = "VARCHAR(255)")
     private String senha;
-    private String nome;
+    @Column(name = "operador", columnDefinition = "INT")
     private Integer operador;
+    @Column(name = "nome", nullable = false, columnDefinition = "VARCHAR(255)")
+    private String nome;
+    @Column(name = "cpf", nullable = false, unique = true, columnDefinition = "VARCHAR(14)")
+    private String cpf;
+    @Column(name = "data_nascimento", columnDefinition = "DATE")
+    private LocalDate dataNascimento;
+    @Column(name = "telefone", columnDefinition = "VARCHAR(15)")
+    private String telefone;
+    @Column(name = "telefone_emergencia", columnDefinition = "VARCHAR(15)")
+    private String telefoneEmergencia;
+    @Column(name = "tipo_sanguineo", columnDefinition = "VARCHAR(3)")
+    private String tipoSanguineo;
+    @Column(name = "ocupacao", columnDefinition = "VARCHAR(255)")
+    private String ocupacao;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "users_roles", // Nome da tabela de junção
+            joinColumns = @JoinColumn(name = "user_id"), // Chave estrangeira para a entidade 'user'
+            inverseJoinColumns = @JoinColumn(name = "role_id") // Chave estrangeira para a entidade 'role'
+    )
     private List<ModelRole> roles;
 }
