@@ -71,10 +71,9 @@ public class WebhookController {
             String scriptPath = "/home/webhook/deploy.sh";
 
             ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
-            processBuilder.inheritIO();
-            Process process = processBuilder.start();
-            process.waitFor();
-        } catch (IOException | InterruptedException e) {
+            processBuilder.inheritIO(); // Opção para redirecionar a saída do processo
+            processBuilder.start(); // Inicia o processo sem esperar que ele termine
+        } catch (IOException e) {
             throw new RuntimeException("Error executing deploy script", e);
         }
     }
