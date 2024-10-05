@@ -61,7 +61,7 @@ public class SecurityConfig {
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://airsoftcontrol.com.br/", "https://api.airsoftcontrol.com.br/", "http://localhost:3000")); // Permite requisições do frontend React
+        configuration.setAllowedOrigins(Arrays.asList("https://airsoftcontrol.com.br/", "http://localhost:3000")); // Permite requisições do frontend React
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Cabeçalhos permitidos
         configuration.setAllowCredentials(true); // Permite credenciais (cookies, headers de autorização)
