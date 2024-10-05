@@ -14,7 +14,7 @@ public class WebhookController {
 
     @PostMapping("/webhook")
     public void handleWebhook(@RequestBody String payload,
-            @RequestHeader(value = "X-Hub-Signature", required = false) String signature) {
+            @RequestHeader(value = "X-Hub-Signature", required = false) String signature) throws InterruptedException, IOException {
         // Validação do segredo (se estiver usando)
         if (!isValidSignature(signature)) {
             // Retorne uma resposta de erro (401 Unauthorized ou 403 Forbidden)
@@ -30,16 +30,14 @@ public class WebhookController {
         return SECRET.equals(signature);
     }
 
-    private void executeDeployScript() {
-        try {
-            String scriptPath = "/home/webhook/deploy.sh";
+    private void executeDeployScript() throws InterruptedException, IOException {
 
-            ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
-            processBuilder.inheritIO();
-            Process process = processBuilder.start();
-            process.waitFor();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace(); // Log de erro
-        }
+        String scriptPath = "/home/webhook/deploy.sh";
+
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
+        processBuilder.inheritIO();
+        Process process = processBuilder.start();
+        process.waitFor();
+
     }
 }
