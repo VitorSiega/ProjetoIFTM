@@ -2,6 +2,8 @@ package com.example.projeto.login.webhook.webhookController;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,31 +15,35 @@ public class WebhookController {
     private static final String SECRET = "vige0284"; // Defina seu segredo aqui
 
     @PostMapping("/webhook")
-    public void handleWebhook(@RequestBody String payload,
+    public ResponseEntity<String> handleWebhook(@RequestBody String payload,
             @RequestHeader(value = "X-Hub-Signature", required = false) String signature) throws InterruptedException, IOException {
+
         // Validação do segredo (se estiver usando)
         if (!isValidSignature(signature)) {
             // Retorne uma resposta de erro (401 Unauthorized ou 403 Forbidden)
-            throw new RuntimeException("Invalid signature");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid signature");
         }
 
         // Processar o payload recebido
         executeDeployScript();
+        return ResponseEntity.ok("Webhook handled successfully");
     }
 
     private boolean isValidSignature(String signature) {
         // Adicione a lógica para validar a assinatura com seu segredo
-        return SECRET.equals(signature);
+        return signature != null && signature.equals(SECRET); // Lógica simplificada
     }
 
-    private void executeDeployScript() throws InterruptedException, IOException {
+    private void executeDeployScript() {
+        try {
+            String scriptPath = "/home/webhook/deploy.sh";
 
-        String scriptPath = "/home/webhook/deploy.sh";
-
-        ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
-        processBuilder.inheritIO();
-        Process process = processBuilder.start();
-        process.waitFor();
-
+            ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
+            processBuilder.inheritIO();
+            Process process = processBuilder.start();
+            process.waitFor();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error executing deploy script", e);
+        }
     }
 }

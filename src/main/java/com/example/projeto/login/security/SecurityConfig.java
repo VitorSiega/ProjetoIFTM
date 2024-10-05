@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Política de criação de sessão stateless
                 .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/webhook").permitAll()
                 // voltar isso depois que assim a segurança ta desabilitada
                 // .requestMatchers(
                 // "/api/users/admin/**"
