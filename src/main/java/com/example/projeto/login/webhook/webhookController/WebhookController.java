@@ -19,7 +19,7 @@ public class WebhookController {
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleWebhook(@RequestBody String payload,
-            @RequestHeader(value = "X-Hub-Signature", required = false) String signature) throws InterruptedException, IOException {
+            @RequestHeader(value = "X-Hub-Signature", required = true) String signature) throws InterruptedException, IOException {
 
         // Validação do segredo
         if (!isValidSignature(signature, payload)) {
