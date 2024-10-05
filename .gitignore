@@ -32,4 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 /out/
+
+# Ignorar o arquivo de propriedades do Spring
 application.properties
