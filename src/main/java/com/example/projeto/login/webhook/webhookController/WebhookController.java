@@ -1,22 +1,33 @@
 package com.example.projeto.login.webhook.webhookController;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class WebhookController {
 
-    private static final Logger LOGGER = Logger.getLogger(WebhookController.class.getName());
+    private static final String SECRET = "vige0284"; // Defina seu segredo aqui
 
     @PostMapping("/webhook")
-    public void handleWebhook(@RequestBody String payload) {
-        LOGGER.info("Recebido webhook com payload: " + payload);
+    public void handleWebhook(@RequestBody String payload,
+            @RequestHeader(value = "X-Hub-Signature", required = false) String signature) {
+        // Validação do segredo (se estiver usando)
+        if (!isValidSignature(signature)) {
+            // Retorne uma resposta de erro (401 Unauthorized ou 403 Forbidden)
+            throw new RuntimeException("Invalid signature");
+        }
+
+        // Processar o payload recebido
         executeDeployScript();
+    }
+
+    private boolean isValidSignature(String signature) {
+        // Adicione a lógica para validar a assinatura com seu segredo
+        return SECRET.equals(signature);
     }
 
     private void executeDeployScript() {
@@ -26,16 +37,9 @@ public class WebhookController {
             ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
             processBuilder.inheritIO();
             Process process = processBuilder.start();
-
-            int exitCode = process.waitFor();  // Espera o script terminar
-            if (exitCode == 0) {
-                LOGGER.info("Script de deploy executado com sucesso.");
-            } else {
-                LOGGER.severe("Falha na execução do script de deploy. Código de saída: " + exitCode);
-            }
+            process.waitFor();
         } catch (IOException | InterruptedException e) {
-            LOGGER.log(Level.SEVERE, "Erro ao executar o script de deploy.", e);
-            Thread.currentThread().interrupt();  // Restaura o estado de interrupção após capturar InterruptedException
+            e.printStackTrace(); // Log de erro
         }
     }
 }
