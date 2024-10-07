@@ -1,6 +1,8 @@
 package com.example.projeto.login.webhook.webhookController;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -53,7 +55,7 @@ public class WebhookController {
             mac.init(secretKeySpec);
             byte[] hmac = mac.doFinal(data.getBytes());
             return bytesToHex(hmac);
-        } catch (Exception e) {
+        } catch (IllegalStateException | InvalidKeyException | NoSuchAlgorithmException e) {
             throw new RuntimeException("Error generating HMAC", e);
         }
     }

@@ -1,11 +1,16 @@
 package com.example.projeto.games.controller;
-import com.example.projeto.games.dto.GamesDTO;
-import com.example.projeto.games.repository.GamesRepository;
-import com.example.projeto.games.service.GamesService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.projeto.games.dto.GamesDTO;
+import com.example.projeto.games.service.GamesService;
+
 @RestController
 @RequestMapping("/api")
 public class GamesController {
@@ -16,8 +21,8 @@ public class GamesController {
     @PostMapping("/jogos")
     public ResponseEntity<String> cadastrarJogo(@RequestBody GamesDTO gamesDTO) {
         try {
-            if (gamesDTO.nome().isEmpty() || gamesDTO.descricao().isEmpty() ||
-                    gamesDTO.local().isEmpty() ||  gamesDTO.responsaveis().isEmpty()) {
+            if (gamesDTO.nome().isEmpty() || gamesDTO.descricao().isEmpty()
+                    || gamesDTO.local().isEmpty() || gamesDTO.responsaveis().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
             }
 
@@ -27,6 +32,5 @@ public class GamesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao cadastrar jogo: " + e.getMessage());
         }
     }
-
 
 }
