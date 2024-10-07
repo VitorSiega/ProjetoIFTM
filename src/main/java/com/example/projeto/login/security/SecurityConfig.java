@@ -47,7 +47,7 @@ public class SecurityConfig {
                 // ).hasAuthority("ADMINISTRADOR")
 
                 // .requestMatchers(
-                // "/api/users/login",
+                // "/api/user/login",
                 // "/api/users/cadastro"
                 // ).permitAll()
 
