@@ -1,4 +1,4 @@
-package com.example.projeto.login.webhook.webhookController;
+package com.example.projeto.configuracoes;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WebhookController {
 
-    private static final String SECRET = "vige0284"; // Defina seu segredo aqui
+    @Value("${SECRET_KEY}")
+    private String SECRET;
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleWebhook(@RequestBody String payload,
