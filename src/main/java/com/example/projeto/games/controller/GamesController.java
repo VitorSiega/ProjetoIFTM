@@ -20,7 +20,7 @@ import com.example.projeto.games.repository.GamesRepository;
 import com.example.projeto.games.service.GamesService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/jogos/admin")
 public class GamesController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class GamesController {
     @Autowired
     GamesRepository gamesRepository;
 
-    @PostMapping("/admin/jogos/cadastrar")
+    @PostMapping("/cadastrar")
     public ResponseEntity<String> cadastrarJogo(@RequestBody GamesDTO gamesDTO) {
         try {
             if (gamesDTO.nome().isEmpty() || gamesDTO.descricao().isEmpty()
@@ -44,7 +44,7 @@ public class GamesController {
         }
     }
 
-    @PutMapping("/admin/jogos/atualizar/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<String> atualizarJogo(@PathVariable Long id, @RequestBody GamesDTO gamesDto) {
         try {
             if (gamesRepository.findById(id).isEmpty()) {
@@ -60,12 +60,12 @@ public class GamesController {
         }
     }
 
-    @GetMapping("/admin/jogos/listar")
+    @GetMapping("/listar")
     public ResponseEntity<List<GamesModel>> listaJogos() {
         return ResponseEntity.status(200).body(gamesService.listarJogos());
     }
 
-    @DeleteMapping("/admin/jogos/remover/{id}")
+    @DeleteMapping("/remover/{id}")
     public ResponseEntity<String> removerUsuario(@PathVariable Long id) {
         if (gamesService.removerJogo(id)) {
             return ResponseEntity.status(200).body(null);
