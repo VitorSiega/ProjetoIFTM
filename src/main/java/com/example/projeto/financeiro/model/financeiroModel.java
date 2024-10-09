@@ -1,6 +1,5 @@
 package com.example.projeto.financeiro.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import com.example.projeto.login.model.ModelUser;
@@ -24,12 +23,11 @@ import lombok.NoArgsConstructor;
 @Data
 @Table(name = "financeiro")
 @Entity
-public class financeiroModel implements Serializable {
+public class FinanceiroModel {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "operador_id", nullable = false)
@@ -46,4 +44,5 @@ public class financeiroModel implements Serializable {
 
     @Column(name = "status", nullable = false, columnDefinition = "varchar(20)")
     private String status;
+
 }
