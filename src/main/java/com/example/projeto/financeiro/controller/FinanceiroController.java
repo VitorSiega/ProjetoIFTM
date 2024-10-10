@@ -20,6 +20,7 @@ import com.example.projeto.financeiro.service.FinanceiroService;
 @RequestMapping("/api/admin/financeiro")
 public class FinanceiroController {
 
+    //atualiza
     @Autowired
     private FinanceiroService financeiroService;
 
