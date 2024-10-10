@@ -33,16 +33,19 @@ public class FinanceiroModel {
     @JoinColumn(name = "operador_id", nullable = false)
     private ModelUser user;
 
-    @Column(name = "mes", nullable = false)
-    private int mesAtual;
+    @Column(name = "mes_atual", nullable = false, columnDefinition = "varchar(20)")
+    private String mesAtual;
 
-    @Column(name = "dia_pago", nullable = false, columnDefinition = "date")
+    @Column(name = "ano_atual", nullable = false)
+    private int anoAtual;
+
+    @Column(name = "dia_pago", nullable = true, columnDefinition = "date")
     private LocalDate diaPago;
 
     @Column(name = "valor_pago", nullable = false)
-    Float valorPago;
+    Double valorPago;
 
-    @Column(name = "status", nullable = false, columnDefinition = "varchar(20)")
+    @Column(name = "status", nullable = false, columnDefinition = "varchar(25)")
     private String status;
 
 }

@@ -10,5 +10,5 @@ import com.example.projeto.financeiro.model.FinanceiroModel;
 @Repository
 public interface FinanceiroRepository extends JpaRepository<FinanceiroModel, Long> {
 
-    List<FinanceiroModel> findByMesAtual(int mesAtual);
+    List<FinanceiroModel> findByMesAtualAndAnoAtual(String mes, int ano);
 }

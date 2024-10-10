@@ -1,7 +1,6 @@
 package com.example.projeto.presenca.controller;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,28 +17,27 @@ import com.example.projeto.presenca.model.PresencaModel;
 import com.example.projeto.presenca.service.PresencaService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/presenca/admin")
 public class PresencaController {
 
     @Autowired
     PresencaService presencaService;
 
-    @PutMapping("/admin/lancar/presenca")
+    @PutMapping("/lancar")
     public ResponseEntity<?> registrarPresenca(@RequestBody List<PresencaDTO> presencaDTO) {
 
-        List<PresencaDTO> listaReduzida = new ArrayList<>();
-
-        presencaDTO.forEach(list -> {
-            if (list.status().equals("presente")) {
-                listaReduzida.add(list);
-            }
-        });
-
-        presencaService.registrarPresenca(listaReduzida);
+        // List<PresencaDTO> listaReduzida = new ArrayList<>();
+        // presencaDTO.forEach(list -> {
+        //     if (list.status().equals("presente")) {
+        //         listaReduzida.add(list);
+        //     }
+        // });
+        // presencaService.registrarPresenca(listaReduzida);
+        presencaService.registrarPresenca(presencaDTO);
         return ResponseEntity.status(200).body(null);
     }
 
-    @GetMapping("/admin/listar/presenca")
+    @GetMapping("/listar")
     public ResponseEntity<List<PresencaModel>> listarPresencaPorData(@RequestParam("buscarPresencaData") LocalDate dataBuscar) {
         List<PresencaModel> presencas = presencaService.buscarPresenca(dataBuscar);
         return ResponseEntity.ok(presencas);

@@ -1,7 +1,6 @@
 package com.example.projeto.presenca.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,18 +38,21 @@ public class PresencaService {
     }
 
     public List<PresencaModel> buscarPresenca(LocalDate dataDoLancamento) {
-        if (presenceRepository.findByData(dataDoLancamento).isEmpty()) {
-            List<PresencaModel> gerarLista = new ArrayList<>();
+        if (presenceRepository.findByData(dataDoLancamento).isEmpty()
+                || presenceRepository.findByData(dataDoLancamento).size() < userRepository.findAll().size()) {
+            List<PresencaModel> gerarLista = presenceRepository.findAll();
             List<ModelUser> receberUsuarios = userRepository.findAll();
+            int gerarListaSize = gerarLista.size();
 
-            receberUsuarios.forEach(usuario -> {
+            for (int i = gerarListaSize; i < receberUsuarios.size(); i++) {
+                ModelUser usuario = receberUsuarios.get(i);
                 PresencaModel listaGerada = PresencaModel.builder()
                         .user(usuario)
                         .data(dataDoLancamento)
                         .status("falta")
                         .build();
                 gerarLista.add(listaGerada);
-            });
+            }
             presenceRepository.saveAll(gerarLista);
             return gerarLista;
         } else {

@@ -1,7 +1,11 @@
 package com.example.projeto.financeiro.dto;
 
-import com.example.projeto.login.model.ModelUser;
+import java.time.LocalDate;
 
-public record FinanceiroDTO(ModelUser user, Float valor, String status) {
-    
+public record FinanceiroDTO(
+        Long id,
+        LocalDate dia_pago,
+        Double valorPago,
+        String status) {
+
 }
