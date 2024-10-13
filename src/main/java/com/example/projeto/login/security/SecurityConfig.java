@@ -46,7 +46,6 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasAnyRole("ADMINISTRADOR")
                 .requestMatchers("/api/operador/**").hasRole("OPERADOR") // Apenas OPERADOR pode acessar
                 .requestMatchers("/api/recruta/**").hasRole("RECRUTA") // Apenas RECRUTA pode acessar
-                .anyRequest().authenticated() // Qualquer outra requisição precisa estar autenticada
                 )
                 .addFilterBefore(userAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro JWT antes do filtro de autenticação padrão
                 .build();
