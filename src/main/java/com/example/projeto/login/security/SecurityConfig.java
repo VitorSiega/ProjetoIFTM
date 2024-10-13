@@ -41,11 +41,18 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Política de criação de sessão stateless
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/user/login", "/webhook").permitAll() // Permite acesso ao endpoint de login
-                .requestMatchers("/api/admin/**").hasAnyRole("ADMINISTRADOR")
-                .requestMatchers("/api/operador/**").hasRole("OPERADOR") // Apenas OPERADOR pode acessar
-                .requestMatchers("/api/recruta/**").hasRole("RECRUTA") // Apenas RECRUTA pode acessar
-                )
+                // voltar isso depois que assim a segurança ta desabilitada
+                // .requestMatchers(
+                // "/api/users/admin/**"
+                // ).hasAuthority("ADMINISTRADOR")
+
+                // .requestMatchers(
+                // "/api/user/login",
+                // "/api/users/cadastro"
+                // ).permitAll()
+
+                // .requestMatchers("/api/**").authenticated()
+                .anyRequest().permitAll())
                 .addFilterBefore(userAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro JWT antes do filtro de autenticação padrão
                 .build();
     }
