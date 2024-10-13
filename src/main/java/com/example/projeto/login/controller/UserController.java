@@ -88,8 +88,9 @@ public class UserController {
             if (createUserDTO.operador() <= 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
             }
-            if (userRepository.findByOperador(createUserDTO.operador()).isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Operador ja existente");
+            if (userRepository.findByOperador(createUserDTO.operador()).isPresent()
+                    && !userRepository.findByOperador(createUserDTO.operador()).get().getOperador().equals(createUserDTO.operador())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Operador já existente");
             }
             userService.atualizarUsuario(id, createUserDTO);
             return ResponseEntity.status(200).body(null);
