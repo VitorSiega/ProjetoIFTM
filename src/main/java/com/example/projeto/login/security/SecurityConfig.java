@@ -41,8 +41,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Política de criação de sessão stateless
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/webhook").permitAll()
-                .requestMatchers("/api/user/login").permitAll() // Permite acesso ao endpoint de login
+                .requestMatchers("/api/user/login", "/webhook").permitAll() // Permite acesso ao endpoint de login
                 .requestMatchers("/api/admin/**").hasAnyRole("ADMINISTRADOR")
                 .requestMatchers("/api/operador/**").hasRole("OPERADOR") // Apenas OPERADOR pode acessar
                 .requestMatchers("/api/recruta/**").hasRole("RECRUTA") // Apenas RECRUTA pode acessar
