@@ -44,7 +44,7 @@ public class SecurityConfig {
                 // voltar isso depois que assim a segurança ta desabilitada
                 .requestMatchers(
                         "/api/admin/**"
-                ).hasAuthority("ADMINISTRADOR")
+                ).hasRole("ADMINISTRADOR")
                 .requestMatchers(
                         "/api/user/login"
                 ).permitAll()
