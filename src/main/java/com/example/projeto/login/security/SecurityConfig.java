@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Política de criação de sessão stateless
                 .authorizeHttpRequests(auth -> auth
                 // voltar isso depois que assim a segurança ta desabilitada
-                .requestMatchers("/api/users/admin/**").hasRole("ADIMINISTRADOR")
+                .requestMatchers("/api/users/admin/**").hasRole("ADMINISTRADOR")
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll())
                 .addFilterBefore(userAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // Adiciona o filtro JWT antes do filtro de autenticação padrão
