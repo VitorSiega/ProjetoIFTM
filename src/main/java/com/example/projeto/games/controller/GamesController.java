@@ -20,7 +20,7 @@ import com.example.projeto.games.repository.GamesRepository;
 import com.example.projeto.games.service.GamesService;
 
 @RestController
-@RequestMapping("/api/jogos/admin")
+@RequestMapping("/api/admin/jogo")
 public class GamesController {
 
     @Autowired

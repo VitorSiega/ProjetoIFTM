@@ -17,7 +17,7 @@ import com.example.projeto.presenca.model.PresencaModel;
 import com.example.projeto.presenca.service.PresencaService;
 
 @RestController
-@RequestMapping("/api/presenca/admin")
+@RequestMapping("/api/admin/presenca")
 public class PresencaController {
 
     @Autowired
