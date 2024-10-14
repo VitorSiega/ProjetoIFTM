@@ -7,7 +7,7 @@ CREATE TABLE roles (
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE modeluser (
+CREATE TABLE user (
     id int auto_increment,
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE users_roles (
     user_id int NOT NULL,
     role_id int NOT NULL,
     PRIMARY KEY (user_id, role_id),
-    FOREIGN KEY (user_id) REFERENCES modeluser(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 

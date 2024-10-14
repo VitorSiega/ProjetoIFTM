@@ -15,6 +15,7 @@ public record CreateUserDTO(
         String telefoneEmergencia,
         String tipoSanguineo,
         String ocupacao,
+        String statusOperador,
         Role role) {
 
 }

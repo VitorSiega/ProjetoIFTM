@@ -52,6 +52,7 @@ public class UserService {
                 .telefoneEmergencia(createUserDto.telefoneEmergencia())
                 .tipoSanguineo(createUserDto.tipoSanguineo())
                 .ocupacao(createUserDto.ocupacao())
+                .statusOperador(createUserDto.statusOperador())
                 .roles(List.of(role)) // Associa a role ao usuário
                 .build();
         userRepository.save(newUser);
@@ -83,6 +84,7 @@ public class UserService {
         userAtual.setTelefoneEmergencia(updateUserDTO.telefoneEmergencia());
         userAtual.setTipoSanguineo(updateUserDTO.tipoSanguineo());
         userAtual.setOcupacao(updateUserDTO.ocupacao());
+        userAtual.setStatusOperador(updateUserDTO.statusOperador());
         // Atualiza as roles
         userAtual.getRoles().clear(); // Remove as roles antigas
         userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role())); // Adiciona a nova role
