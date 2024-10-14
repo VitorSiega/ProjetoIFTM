@@ -55,7 +55,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Já existe uma pessoa usando esse email!");
             }
-            if (userRepository.findByOperador(createUserDTO.operador()).isPresent() && !userRepository.findByOperador(createUserDTO.operador()).equals(0)) {
+            if (userRepository.findByOperador(createUserDTO.operador()).isPresent() && createUserDTO.operador() != 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
             }
             if (userRepository.findByOperador(createUserDTO.operador()).isPresent()
