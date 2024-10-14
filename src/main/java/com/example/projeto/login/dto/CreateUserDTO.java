@@ -6,9 +6,9 @@ import com.example.projeto.login.enums.Role;
 
 public record CreateUserDTO(
         String email,
+        String nome,
         String senha,
         int operador,
-        String nome,
         String cpf,
         LocalDate dataNascimento,
         String telefone,
