@@ -89,7 +89,7 @@ public class UserService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail já esta cadastrado");
             }
 
-            if (updateUserDTO.operador() != 0 && userRepository.findByOperador(updateUserDTO.operador()).isPresent()) {
+            if (updateUserDTO.operador() != 0 && !userRepository.findByOperador(updateUserDTO.operador()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador já existe");
             }
 
