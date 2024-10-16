@@ -76,7 +76,7 @@ public class UserService {
         // Atualiza os campos do usuário
         userAtual.setEmail(updateUserDTO.email());
 
-        if (!userAtual.getSenha().equals("")) {
+        if (!userAtual.getSenha().isEmpty() && !passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
             userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
         }
 
