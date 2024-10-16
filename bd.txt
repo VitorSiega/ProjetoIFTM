@@ -12,13 +12,14 @@ CREATE TABLE user (
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     nome VARCHAR(255) NOT NULL,
-    operador INT NOT NULL UNIQUE,
+    operador INT null,
     cpf VARCHAR(14) NOT NULL,
-    data_nascimento DATE NOT NULL,
-    telefone VARCHAR(15) NOT NULL,
+    data_nascimento DATE, 
+    telefone VARCHAR(15),
     telefone_emergencia VARCHAR(15),
     tipo_sanguineo VARCHAR(3),
     ocupacao VARCHAR(100),
+    status_operador varchar(10)
     PRIMARY KEY (id)
 );
 
@@ -36,6 +37,18 @@ CREATE TABLE presencas (
     data DATE NOT NULL,
     status VARCHAR(10),
 	FOREIGN KEY (user_id) REFERENCES modeluser(id) ON DELETE CASCADE
+);
+
+CREATE TABLE financeiro (
+    id INT AUTO_INCREMENT,
+    operador_id INT NOT NULL,
+    mes_atual varchar(20) not null,
+    ano_atual int not null,
+    dia_pago DATE,
+    valor_pago DECIMAL(15, 2) NOT NULL, -- Usei DECIMAL para valores monetários com precisão e escala
+    status VARCHAR(25) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (operador_id) REFERENCES user(id) -- Corrigi 'foreing' para 'foreign'
 );
 
 SELECT * FROM users_roles;
