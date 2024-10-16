@@ -1,7 +1,6 @@
 package com.example.projeto.login.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,13 +82,13 @@ public class UserService {
                 userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
             }
 
-            Optional<ModelUser> userExistente = userRepository.findByEmail(updateUserDTO.email());
-            if (userExistente.isPresent() && !userExistente.get().getId().equals(id)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Já existe uma pessoa usando esse email");
+            if (!userAtual.getEmail().equals(updateUserDTO.email())
+                    && userRepository.findByEmail(updateUserDTO.email()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail ja cadastrado");
             }
 
-            if (updateUserDTO.operador() != 0 && !userRepository.findByOperador(updateUserDTO.operador()).isPresent()) {
+            if (updateUserDTO.operador() != 0 && userRepository.findByOperador(updateUserDTO.operador()).isPresent()
+                    && !userAtual.getOperador().equals(updateUserDTO.operador())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador já existe");
             }
 
@@ -97,6 +96,7 @@ public class UserService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
             }
 
+            userAtual.setEmail(updateUserDTO.email());
             userAtual.setOperador(updateUserDTO.operador());
             userAtual.setNome(updateUserDTO.nome());
             userAtual.setCpf(updateUserDTO.cpf());
