@@ -1,6 +1,7 @@
 package com.example.projeto.login.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,11 +83,10 @@ public class UserService {
                 userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
             }
 
-            if (!userAtual.getEmail().equals(updateUserDTO.email())
-                    && !userRepository.findByEmail(updateUserDTO.email()).isPresent()) {
-                userAtual.setEmail(updateUserDTO.email());
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail já esta cadastrado");
+            Optional<ModelUser> userExistente = userRepository.findByEmail(updateUserDTO.email());
+            if (userExistente.isPresent() && !userExistente.get().getId().equals(id)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Já existe uma pessoa usando esse email");
             }
 
             if (updateUserDTO.operador() != 0 && !userRepository.findByOperador(updateUserDTO.operador()).isPresent()) {
