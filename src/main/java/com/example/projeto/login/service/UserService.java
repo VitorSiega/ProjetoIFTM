@@ -75,7 +75,11 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
         // Atualiza os campos do usuário
         userAtual.setEmail(updateUserDTO.email());
-        userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
+
+        if (!userAtual.getSenha().equals("")) {
+            userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
+        }
+
         userAtual.setOperador(updateUserDTO.operador());
         userAtual.setNome(updateUserDTO.nome());
         userAtual.setCpf(updateUserDTO.cpf());

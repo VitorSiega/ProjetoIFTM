@@ -1,6 +1,7 @@
 package com.example.projeto.login.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,9 +79,10 @@ public class UserController {
             if (createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
             }
-            if (userRepository.findByEmail(createUserDTO.email()).isPresent()) {
+            Optional<ModelUser> userExistente = userRepository.findByEmail(createUserDTO.email());
+            if (userExistente.isPresent() && !userExistente.get().getId().equals(id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Já existe uma pessoa usando esse email!");
+                        .body("Já existe uma pessoa usando esse email");
             }
             if (userRepository.findByOperador(createUserDTO.operador()).isPresent() && createUserDTO.operador() != 0 || createUserDTO.operador() < 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido ou já existe");
