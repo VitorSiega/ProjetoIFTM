@@ -56,8 +56,12 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Já existe uma pessoa usando esse email!");
             }
-            if (userRepository.findByOperador(createUserDTO.operador()).isPresent() && createUserDTO.operador() != 0 || createUserDTO.operador() < 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido ou já existe");
+            if (createUserDTO.operador() != 0 && userRepository.findByOperador(createUserDTO.operador()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador já existe");
+            }
+
+            if (createUserDTO.operador() < 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
             }
             if (userRepository.findByCpf(createUserDTO.cpf()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CPF já cadastrado");
@@ -76,16 +80,17 @@ public class UserController {
             if (userRepository.findById(id).isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não encontrado");
             }
-            if (createUserDTO.email().isEmpty() || createUserDTO.senha().isEmpty() || createUserDTO.nome().isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Preencha todos os dados");
-            }
             Optional<ModelUser> userExistente = userRepository.findByEmail(createUserDTO.email());
             if (userExistente.isPresent() && !userExistente.get().getId().equals(id)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Já existe uma pessoa usando esse email");
             }
-            if (userRepository.findByOperador(createUserDTO.operador()).isPresent() && createUserDTO.operador() != 0 || createUserDTO.operador() < 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido ou já existe");
+            if (createUserDTO.operador() != 0 && userRepository.findByOperador(createUserDTO.operador()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador já existe");
+            }
+
+            if (createUserDTO.operador() < 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
             }
             userService.atualizarUsuario(id, createUserDTO);
             return ResponseEntity.status(200).body(null);
