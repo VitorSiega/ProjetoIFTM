@@ -2,6 +2,8 @@ package com.example.projeto.login.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -69,31 +71,50 @@ public class UserService {
         return new JwtTokenDTO(jwtTokenService.generateToken(modelUserDetails));
     }
 
-    public void atualizarUsuario(Long id, CreateUserDTO updateUserDTO) {
-        // Carrega o usuário do banco
-        ModelUser userAtual = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-        // Atualiza os campos do usuário
-        userAtual.setEmail(updateUserDTO.email());
+    public ResponseEntity<String> atualizarUsuario(Long id, CreateUserDTO updateUserDTO) {
+        try {
+            ModelUser userAtual = userRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+            userAtual.setEmail(updateUserDTO.email());
 
-        if (!updateUserDTO.senha().isEmpty() && !passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
-            userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
+            if (!updateUserDTO.senha().isEmpty()
+                    && !passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
+                userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
+            }
+
+            if (!userAtual.getEmail().equals(updateUserDTO.email())
+                    && !userRepository.findByEmail(updateUserDTO.email()).isPresent()) {
+                userAtual.setEmail(updateUserDTO.email());
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail já esta cadastrado");
+            }
+
+            if (updateUserDTO.operador() != 0 && userRepository.findByOperador(updateUserDTO.operador()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador já existe");
+            }
+
+            if (updateUserDTO.operador() < 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
+            }
+
+            userAtual.setOperador(updateUserDTO.operador());
+            userAtual.setNome(updateUserDTO.nome());
+            userAtual.setCpf(updateUserDTO.cpf());
+            userAtual.setDataNascimento(updateUserDTO.dataNascimento());
+            userAtual.setTelefone(updateUserDTO.telefone());
+            userAtual.setTelefoneEmergencia(updateUserDTO.telefoneEmergencia());
+            userAtual.setTipoSanguineo(updateUserDTO.tipoSanguineo());
+            userAtual.setOcupacao(updateUserDTO.ocupacao());
+            userAtual.setStatusOperador(updateUserDTO.statusOperador());
+            // Atualiza as roles
+            userAtual.getRoles().clear(); // Remove as roles antigas
+            userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role())); // Adiciona a nova role
+            // Persiste as alterações
+            userRepository.save(userAtual);
+            return ResponseEntity.status(200).body("Operador cadastrado");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuário: " + e.getMessage());
         }
-
-        userAtual.setOperador(updateUserDTO.operador());
-        userAtual.setNome(updateUserDTO.nome());
-        userAtual.setCpf(updateUserDTO.cpf());
-        userAtual.setDataNascimento(updateUserDTO.dataNascimento());
-        userAtual.setTelefone(updateUserDTO.telefone());
-        userAtual.setTelefoneEmergencia(updateUserDTO.telefoneEmergencia());
-        userAtual.setTipoSanguineo(updateUserDTO.tipoSanguineo());
-        userAtual.setOcupacao(updateUserDTO.ocupacao());
-        userAtual.setStatusOperador(updateUserDTO.statusOperador());
-        // Atualiza as roles
-        userAtual.getRoles().clear(); // Remove as roles antigas
-        userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role())); // Adiciona a nova role
-        // Persiste as alterações
-        userRepository.save(userAtual);
     }
 
     public boolean removerUsuario(Long id) {

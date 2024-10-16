@@ -1,7 +1,6 @@
 package com.example.projeto.login.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -79,27 +78,7 @@ public class UserController {
 
     @PutMapping("/admin/atualizar/{id}")
     public ResponseEntity<String> atualizarUsuario(@PathVariable Long id, @RequestBody CreateUserDTO createUserDTO) {
-        try {
-            if (userRepository.findById(id).isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não encontrado");
-            }
-            Optional<ModelUser> userExistente = userRepository.findByEmail(createUserDTO.email());
-            if (userExistente.isPresent() && !userExistente.get().getId().equals(id)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Já existe uma pessoa usando esse email");
-            }
-            if (createUserDTO.operador() != 0 && userRepository.findByOperador(createUserDTO.operador()).isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador já existe");
-            }
-
-            if (createUserDTO.operador() < 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
-            }
-            userService.atualizarUsuario(id, createUserDTO);
-            return ResponseEntity.status(200).body(null);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuário: " + e.getMessage());
-        }
+        return userService.atualizarUsuario(id, createUserDTO);
     }
 
     @DeleteMapping("/admin/remover/{id}")
