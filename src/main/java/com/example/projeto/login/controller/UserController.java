@@ -66,9 +66,9 @@ public class UserController {
             if (userRepository.findByCpf(createUserDTO.cpf()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CPF já cadastrado");
             }
-            // if (createUserDTO.senha().isEmpty()) {
-            //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Coloque uma senha");
-            // }
+            if (createUserDTO.senha().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Coloque uma senha");
+            }
 
             userService.salvarUsuario(createUserDTO);
             return ResponseEntity.status(201).body(null);
