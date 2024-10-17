@@ -23,7 +23,8 @@ public class WebhookConfig {
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleWebhook(@RequestBody String payload,
-            @RequestHeader(value = "X-Hub-Signature", required = false) String signature) throws InterruptedException, IOException {
+            @RequestHeader(value = "X-Hub-Signature", required = false) String signature)
+            throws InterruptedException, IOException {
 
         // Validação do segredo
         if (!isValidSignature(signature, payload)) {
@@ -72,9 +73,9 @@ public class WebhookConfig {
 
     private void executeDeployScript() {
         try {
-            String scriptPath = "/home/webhook/deploy.sh";
+            String scriptPath = "/home/servidor/webhook/deploy.sh";
 
-            ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
+            ProcessBuilder processBuilder = new ProcessBuilder("sudo", "-u", "servidor", "bash", scriptPath);
             processBuilder.inheritIO(); // Opção para redirecionar a saída do processo
             processBuilder.start(); // Inicia o processo sem esperar que ele termine
         } catch (IOException e) {

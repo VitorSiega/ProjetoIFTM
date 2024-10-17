@@ -73,6 +73,7 @@ public class UserService {
 
     public ResponseEntity<String> atualizarUsuario(Long id, CreateUserDTO updateUserDTO) {
         try {
+
             ModelUser userAtual = userRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
             userAtual.setEmail(updateUserDTO.email());
@@ -81,17 +82,14 @@ public class UserService {
                     && !passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
                 userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
             }
-
             if (!userAtual.getEmail().equals(updateUserDTO.email())
                     && userRepository.findByEmail(updateUserDTO.email()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail ja cadastrado");
             }
-
             if (updateUserDTO.operador() != 0 && userRepository.findByOperador(updateUserDTO.operador()).isPresent()
                     && !userAtual.getOperador().equals(updateUserDTO.operador())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador já existe");
             }
-
             if (updateUserDTO.operador() < 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
             }
@@ -106,12 +104,11 @@ public class UserService {
             userAtual.setTipoSanguineo(updateUserDTO.tipoSanguineo());
             userAtual.setOcupacao(updateUserDTO.ocupacao());
             userAtual.setStatusOperador(updateUserDTO.statusOperador());
-            // Atualiza as roles
-            userAtual.getRoles().clear(); // Remove as roles antigas
-            userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role())); // Adiciona a nova role
-            // Persiste as alterações
+            userAtual.getRoles().clear();
+            userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role()));
             userRepository.save(userAtual);
             return ResponseEntity.status(200).body("Operador cadastrado");
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuário: " + e.getMessage());
         }
