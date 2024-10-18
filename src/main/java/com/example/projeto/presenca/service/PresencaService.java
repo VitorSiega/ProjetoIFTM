@@ -1,6 +1,7 @@
 package com.example.projeto.presenca.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,25 +39,39 @@ public class PresencaService {
     }
 
     public List<PresencaModel> buscarPresenca(LocalDate dataDoLancamento) {
-        if (presenceRepository.findByData(dataDoLancamento).isEmpty()
-                || presenceRepository.findByData(dataDoLancamento).size() < userRepository.findAll().size()) {
-            List<PresencaModel> gerarLista = presenceRepository.findAll();
-            List<ModelUser> receberUsuarios = userRepository.findAll();
-            int gerarListaSize = gerarLista.size();
+        // Obter todas as presenças para a data especificada
+        List<PresencaModel> presencasExistentes = presenceRepository.findByData(dataDoLancamento);
 
-            for (int i = gerarListaSize; i < receberUsuarios.size(); i++) {
-                ModelUser usuario = receberUsuarios.get(i);
-                PresencaModel listaGerada = PresencaModel.builder()
-                        .user(usuario)
-                        .data(dataDoLancamento)
-                        .status("falta")
-                        .build();
-                gerarLista.add(listaGerada);
+        // Obter todos os usuários
+        List<ModelUser> receberUsuarios = userRepository.findAll();
+
+        // Se não houver presenças registradas ou o número de presenças for menor que o
+        // número de usuários
+        if (presencasExistentes.isEmpty() || presencasExistentes.size() < receberUsuarios.size()) {
+            // Lista para armazenar as presenças geradas
+            List<PresencaModel> gerarLista = new ArrayList<>(presencasExistentes);
+
+            // Adiciona presenças para usuários que ainda não têm uma presença registrada
+            for (ModelUser usuario : receberUsuarios) {
+                // Verifica se o usuário já está presente na lista existente
+                boolean usuarioPresente = presencasExistentes.stream()
+                        .anyMatch(p -> p.getUser().getId().equals(usuario.getId()));
+
+                if (!usuarioPresente) {
+                    PresencaModel listaGerada = PresencaModel.builder()
+                            .user(usuario)
+                            .data(dataDoLancamento)
+                            .status("falta") // Considere usar um Enum aqui
+                            .build();
+                    gerarLista.add(listaGerada);
+                }
             }
+
+            // Salva todas as presenças (novas e existentes)
             presenceRepository.saveAll(gerarLista);
             return gerarLista;
         } else {
-            return presenceRepository.findByData(dataDoLancamento);
+            return presencasExistentes;
         }
     }
 }

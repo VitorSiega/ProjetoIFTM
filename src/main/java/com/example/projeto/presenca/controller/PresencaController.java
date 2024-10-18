@@ -25,22 +25,14 @@ public class PresencaController {
 
     @PutMapping("/lancar")
     public ResponseEntity<?> registrarPresenca(@RequestBody List<PresencaDTO> presencaDTO) {
-
-        // List<PresencaDTO> listaReduzida = new ArrayList<>();
-        // presencaDTO.forEach(list -> {
-        //     if (list.status().equals("presente")) {
-        //         listaReduzida.add(list);
-        //     }
-        // });
-        // presencaService.registrarPresenca(listaReduzida);
         presencaService.registrarPresenca(presencaDTO);
         return ResponseEntity.status(200).body(null);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<PresencaModel>> listarPresencaPorData(@RequestParam("buscarPresencaData") LocalDate dataBuscar) {
+    public ResponseEntity<List<PresencaModel>> listarPresencaPorData(
+            @RequestParam("buscarPresencaData") LocalDate dataBuscar) {
         List<PresencaModel> presencas = presencaService.buscarPresenca(dataBuscar);
         return ResponseEntity.ok(presencas);
     }
-
 }
