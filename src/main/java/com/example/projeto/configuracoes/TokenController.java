@@ -17,7 +17,7 @@ public class TokenController {
         this.jwtDecoder = jwtDecoder;
     }
 
-    @PostMapping("/api/validate-token")
+    @PostMapping("/api/validatetoken")
     public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authorizationHeader) {
         // Verifica se o cabeçalho de autorização está presente e inicia com "Bearer "
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
