@@ -41,7 +41,7 @@ public class ModelUser implements Serializable {
     private Integer operador;
     @Column(name = "nome", nullable = false, columnDefinition = "VARCHAR(255)")
     private String nome;
-    @Column(name = "cpf", nullable = false, unique = true, columnDefinition = "VARCHAR(14)")
+    @Column(name = "cpf", nullable = false, unique = true, columnDefinition = "VARCHAR(15)")
     private String cpf;
     @Column(name = "data_nascimento", columnDefinition = "DATE")
     private LocalDate dataNascimento;
