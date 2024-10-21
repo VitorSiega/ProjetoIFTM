@@ -46,14 +46,14 @@ public class PresencaService {
 
             for (int i = gerarListaSize; i < receberUsuarios.size(); i++) {
                 ModelUser usuario = receberUsuarios.get(i);
-                if (usuario.getStatusOperador().equals("ATIVO")) {
-                    PresencaModel listaGerada = PresencaModel.builder()
-                            .user(usuario)
-                            .data(dataDoLancamento)
-                            .status("falta")
-                            .build();
-                    gerarLista.add(listaGerada);
-                }
+                // if (usuario.getStatusOperador().equals("ATIVO")) {
+                PresencaModel listaGerada = PresencaModel.builder()
+                        .user(usuario)
+                        .data(dataDoLancamento)
+                        .status("falta")
+                        .build();
+                gerarLista.add(listaGerada);
+                // }
             }
             presenceRepository.saveAll(gerarLista);
             return gerarLista;
