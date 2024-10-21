@@ -1,6 +1,7 @@
 package com.example.projeto.presenca.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,37 +30,43 @@ public class PresencaService {
     }
 
     public void registrarPresenca(List<PresencaDTO> listaAtualizar) {
-        listaAtualizar.forEach(list -> {
-            PresencaModel presenca = presenceRepository.findById(list.id())
-                    .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-            presenca.setStatus(list.status());
-            presenceRepository.save(presenca);
+        List<PresencaModel> lista = new ArrayList<>();
+        listaAtualizar.forEach(dto -> {
+            PresencaModel presenca = presenceRepository.findById(dto.id())
+                    .orElseThrow(() -> new EntityNotFoundException("Presença não encontrada"));
+            presenca.setStatus(dto.status());
+            lista.add(presenca);
         });
+        presenceRepository.saveAll(lista);
     }
 
     public List<PresencaModel> buscarPresenca(LocalDate dataDoLancamento) {
         if (presenceRepository.findByData(dataDoLancamento).isEmpty()
                 || presenceRepository.findByData(dataDoLancamento).size() < userRepository.findAll().size()) {
             List<PresencaModel> gerarLista = presenceRepository.findByData(dataDoLancamento);
-            List<ModelUser> receberUsuarios = userRepository.findAll();
+            List<ModelUser> receberUsuarios = userRepository.findByStatusOperador("ATIVO");
             int gerarListaSize = gerarLista.size();
 
             for (int i = gerarListaSize; i < receberUsuarios.size(); i++) {
                 ModelUser usuario = receberUsuarios.get(i);
-                if (usuario.getStatusOperador().equals("ATIVO")) {
-                    PresencaModel listaGerada = PresencaModel.builder()
-                            .user(usuario)
-                            .data(dataDoLancamento)
-                            .status("falta")
-                            .build();
-                    gerarLista.add(listaGerada);
-                }
+                // if (usuario.getStatusOperador().equals("ATIVO")) {
+                PresencaModel listaGerada = PresencaModel.builder()
+                        .user(usuario)
+                        .data(dataDoLancamento)
+                        .status("FALTA")
+                        .build();
+                gerarLista.add(listaGerada);
+                // }
             }
             presenceRepository.saveAll(gerarLista);
             return gerarLista;
         } else {
             return presenceRepository.findByData(dataDoLancamento);
         }
+    }
+
+    public void deletarData(LocalDate dataRemover) {
+        presenceRepository.deleteByData(dataRemover);
     }
 
 }

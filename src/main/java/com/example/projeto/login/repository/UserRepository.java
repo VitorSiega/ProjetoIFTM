@@ -1,5 +1,6 @@
 package com.example.projeto.login.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface UserRepository extends JpaRepository<ModelUser, Long> {
     Optional<ModelUser> findByOperador(int operador);
 
     Optional<ModelUser> findByCpf(String cpf);
+
+    List<ModelUser> findByStatusOperador(String statusOperador);
 }

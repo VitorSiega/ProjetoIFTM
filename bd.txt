@@ -36,7 +36,7 @@ CREATE TABLE presencas (
     user_id INT NOT NULL,
     data DATE NOT NULL,
     status VARCHAR(10),
-	FOREIGN KEY (user_id) REFERENCES modeluser(id) ON DELETE CASCADE
+	FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
 CREATE TABLE financeiro (
