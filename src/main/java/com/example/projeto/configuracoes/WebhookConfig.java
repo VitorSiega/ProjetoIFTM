@@ -75,8 +75,7 @@ public class WebhookConfig {
         try {
             String scriptPath = "/home/servidor/webhook/deploy.sh";
 
-            ProcessBuilder processBuilder = new ProcessBuilder("sudo", "-u", "servidor", "bash ",
-                    scriptPath);
+            ProcessBuilder processBuilder = new ProcessBuilder("bash", scriptPath);
             processBuilder.inheritIO(); // Opção para redirecionar a saída do processo
             processBuilder.start(); // Inicia o processo sem esperar que ele termine
         } catch (IOException e) {
