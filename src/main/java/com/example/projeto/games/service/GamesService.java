@@ -25,18 +25,18 @@ public class GamesService {
 
     public void salvarJogo(GamesDTO createGamesDTO) {
 
-        // Cria o novo game
-        GamesModel newGame = GamesModel.builder()
-                .id(createGamesDTO.id())
-                .nome(createGamesDTO.nome())
-                .dataJogo(createGamesDTO.dataJogo())
-                .descricao(createGamesDTO.descricao())
-                .local(createGamesDTO.local())
-                .situacao(createGamesDTO.situacao())
-                .responsaveis(createGamesDTO.responsaveis())
-                .build();
-        gamesRepository.save(newGame);
-    }
+    // // Cria o novo game
+    // GamesModel newGame = GamesModel.builder()
+    // .id(createGamesDTO.id())
+    // .nome(createGamesDTO.nome())
+    // .dataJogo(createGamesDTO.dataJogo())
+    // .descricao(createGamesDTO.descricao())
+    // .local(createGamesDTO.local())
+    // .situacao(createGamesDTO.situacao())
+    // .responsaveis(createGamesDTO.responsaveis())
+    // .build();
+    // gamesRepository.save(newGame);
+    // }
 
     public void atualizarJogo(Long id, GamesDTO updateGamesDTO) {
         GamesModel game = gamesRepository.findById(id)
