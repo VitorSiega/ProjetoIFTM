@@ -37,3 +37,4 @@ build/
 
 # Ignorar o arquivo de propriedades do Spring
 .env
+.bd.txt

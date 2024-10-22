@@ -1,6 +1,3 @@
-create database bd_ftpa;
-use bd_ftpa;
-
 
 CREATE TABLE roles (
     id int primary key auto_increment,
@@ -51,26 +48,5 @@ CREATE TABLE financeiro (
     FOREIGN KEY (operador_id) REFERENCES user(id) -- Corrigi 'foreing' para 'foreign'
 );
 
-SELECT * FROM users_roles;
-select * from modeluser;
-select * from roles;
-select * from presencas;
 
 
-
-
-
-/////////
-
-ROTAS
-
-/api
-
-/user/login
-
-/admin/cadastro
-/admin/atualizar/{id}
-/admin/remover/{id}
-/admin/listar
-/admin/lancar/presenca
-/admin/listar/presenca
