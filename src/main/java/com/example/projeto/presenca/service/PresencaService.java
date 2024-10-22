@@ -69,4 +69,9 @@ public class PresencaService {
         presenceRepository.deleteByData(dataRemover);
     }
 
+    public List<LocalDate> buscarDatas() {
+        List<LocalDate> datas = presenceRepository.findDistinctData();
+        return datas;
+    }
+
 }

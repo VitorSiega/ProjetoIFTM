@@ -43,4 +43,11 @@ public class PresencaController {
         presencaService.deletarData(dataBuscar);
         return ResponseEntity.status(200).body(null);
     }
+
+    @GetMapping("/listar/datas")
+    public ResponseEntity<?> getMethodName() {
+        List<LocalDate> datas = presencaService.buscarDatas();
+        return ResponseEntity.ok(datas);
+    }
+
 }

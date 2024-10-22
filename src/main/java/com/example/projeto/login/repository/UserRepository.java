@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.projeto.login.model.ModelUser;
@@ -18,4 +20,7 @@ public interface UserRepository extends JpaRepository<ModelUser, Long> {
     Optional<ModelUser> findByCpf(String cpf);
 
     List<ModelUser> findByStatusOperador(String statusOperador);
+
+    @Query("SELECT u FROM ModelUser u WHERE u.statusOperador <> :statusOperador")
+    List<ModelUser> findAllExcludingStatusOperador(@Param("statusOperador") String statusOperador);
 }

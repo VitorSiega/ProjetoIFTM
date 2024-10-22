@@ -22,4 +22,7 @@ public interface PresencaRepository extends JpaRepository<PresencaModel, Long> {
     @Query("DELETE FROM PresencaModel p WHERE p.data = :data")
     void deleteByData(LocalDate data);
 
+    @Query("SELECT DISTINCT p.data FROM PresencaModel p ORDER BY p.data ASC")
+    List<LocalDate> findDistinctData();
+
 }

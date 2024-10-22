@@ -123,6 +123,6 @@ public class UserService {
     }
 
     public List<ModelUser> listarLogins() {// retirar depois
-        return userRepository.findAll();
+        return userRepository.findAllExcludingStatusOperador("ADMIN");
     }
 }
