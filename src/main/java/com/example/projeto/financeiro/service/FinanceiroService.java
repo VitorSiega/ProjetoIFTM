@@ -48,7 +48,7 @@ public class FinanceiroService {
 
         if (financeiroModelList.isEmpty() || financeiroModelList.size() < userRepository.findAll().size()) {
 
-            List<ModelUser> receberUsuarios = userRepository.findByStatusOperador("ATIVO"));
+            List<ModelUser> receberUsuarios = userRepository.findByStatusOperador("ATIVO");
             int gerarListaSize = financeiroModelList.size();
 
             for (int i = gerarListaSize; i < receberUsuarios.size(); i++) {
