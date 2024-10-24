@@ -102,8 +102,9 @@ public class UserController {
     }
 
     @GetMapping("/user/listar")
-    public Optional<ModelUser> getMethodName(@RequestParam Long id) {
-        Optional<ModelUser> user = userRepository.findById(id);
+    public Optional<ModelUser> getMethodName(@RequestParam String id) {
+        Long IDD = Long.valueOf(id);
+        Optional<ModelUser> user = userRepository.findById(IDD);
         return user;
     }
 
