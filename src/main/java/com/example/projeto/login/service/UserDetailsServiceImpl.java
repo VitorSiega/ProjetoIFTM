@@ -36,7 +36,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     return new UsernameNotFoundException("User not found with email: " + email);
                 });
 
-        // Retorna uma instância de ModelUserDetailsImpl com as informações do usuário encontrado
+        // Retorna uma instância de ModelUserDetailsImpl com as informações do usuário
+        // encontrado
+        return new ModelUserDetailsImpl(user);
+    }
+
+    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
+        // Procura o usuário pelo ID
+        ModelUser user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+
+        // Retorna uma instância de ModelUserDetailsImpl com as informações do usuário
+        // encontrado
         return new ModelUserDetailsImpl(user);
     }
 }

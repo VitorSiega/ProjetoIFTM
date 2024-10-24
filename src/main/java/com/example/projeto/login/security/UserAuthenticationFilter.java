@@ -56,10 +56,11 @@ public class UserAuthenticationFilter extends GenericFilterBean {
                     String username = jwtTokenService.pegarToken(token);
 
                     if (username != null) {
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                        UserDetails userDetails = userDetailsService.loadUserById(Long.valueOf(username));
 
                         if (userDetails != null) {
-                            var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                            var authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+                                    userDetails.getAuthorities());
                             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
                             SecurityContextHolder.getContext().setAuthentication(authentication);
                         } else {
