@@ -36,7 +36,6 @@ public class JwtTokenService {
             return JWT.create()
                     .withIssuedAt(dataCriacao())
                     .withExpiresAt(dataExpiracao())// 1 dia de expiração
-                    .withSubject(user.getUsername())// nome de usuário (subject)
                     .withClaim("roles", roles)// Adicionar roles ao payload
                     .sign(algorithm);// assinar o token
         } catch (JWTCreationException exception) {
