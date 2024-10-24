@@ -104,7 +104,7 @@ public class UserController {
     }
 
     @GetMapping("/user/listar")
-    public ModelUser getMethodName(@RequestParam String id) {
+    public ModelUser getMethodName(@RequestParam("usuario") String id) {
         Long IDD = Long.valueOf(id);
         ModelUser user = userRepository.findById(IDD)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
