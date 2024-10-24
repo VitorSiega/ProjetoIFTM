@@ -25,8 +25,6 @@ import com.example.projeto.login.model.ReturnModel;
 import com.example.projeto.login.repository.UserRepository;
 import com.example.projeto.login.service.UserService;
 
-import jakarta.persistence.EntityNotFoundException;
-
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -104,9 +102,8 @@ public class UserController {
     }
 
     @GetMapping("/user/listar")
-    public ModelUser getMethodName(@RequestParam String email) {
-        ModelUser user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+    public Optional<ModelUser> getMethodName(@RequestParam Long id) {
+        Optional<ModelUser> user = userRepository.findById(id);
         return user;
     }
 
