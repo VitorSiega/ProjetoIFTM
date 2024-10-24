@@ -50,9 +50,10 @@ public class JwtTokenService {
             DecodedJWT decodedJWT = JWT.require(algorithm)
                     .build()
                     .verify(token);
-            return decodedJWT.getSubject(); // Extraia o sujeito (username ou id)
+            return decodedJWT.getSubject(); // Retorna o sujeito do token
         } catch (JWTVerificationException e) {
-            throw new RuntimeException("Token invalido ou expirado!", e);
+            // Lança uma exceção específica quando o token é inválido ou expirado
+            throw new JWTVerificationException("Token inválido ou expirado!", e);
         }
     }
 

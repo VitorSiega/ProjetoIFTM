@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.projeto.login.dto.CreateUserDTO;
+import com.example.projeto.login.dto.JwtTokenDTO;
 import com.example.projeto.login.dto.LoginUserDTO;
 import com.example.projeto.login.errorStatus.ErrorResponse;
 import com.example.projeto.login.model.ModelUser;
-import com.example.projeto.login.model.ReturnModel;
 import com.example.projeto.login.repository.UserRepository;
 import com.example.projeto.login.service.UserService;
 
@@ -39,10 +39,8 @@ public class UserController {
     public ResponseEntity<?> loginUsuario(@RequestBody LoginUserDTO loginUserDto) {
         try {
             // JwtTokenDTO token = userService.autenticarUsuario(loginUserDto);
-            ReturnModel model = new ReturnModel();
-            model.setIdUsuario(loginUserDto.email());
-            model.setTokenDTO(userService.autenticarUsuario(loginUserDto));
-            return new ResponseEntity<>(model, HttpStatus.OK);
+            JwtTokenDTO token = userService.autenticarUsuario(loginUserDto);
+            return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (AuthenticationException e) {
             // Autenticação falhou, retornar status 401
             return new ResponseEntity<>(new ErrorResponse("Credenciais inválidas"), HttpStatus.UNAUTHORIZED);
