@@ -45,6 +45,10 @@ public class JwtTokenService {
     }
 
     public String pegarToken(String token) {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("Token não pode ser nulo ou vazio!");
+        }
+
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
             DecodedJWT decodedJWT = JWT.require(algorithm)

@@ -1,9 +1,8 @@
 package com.example.projeto.configuracoes;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -12,26 +11,38 @@ import com.example.projeto.login.security.JwtTokenService;
 @RestController
 public class TokenVerificationController {
 
-    @Autowired
-    private JwtTokenService jwtTokenService;
+    private final JwtTokenService jwtTokenService;
 
-    @GetMapping("/api/token/verify")
-    public ResponseEntity<String> verifyToken(@RequestHeader("Authorization") String authorizationHeader) {
-        // Verifica se o token foi fornecido e se está no formato correto
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.badRequest().body("Token não fornecido ou formato inválido.");
+    public TokenVerificationController(JwtTokenService jwtTokenService) {
+        this.jwtTokenService = jwtTokenService;
+    }
+
+    public static class TokenRequest {
+        private String token;
+
+        public String getToken() {
+            return token;
         }
 
-        // Remove o prefixo "Bearer " do token
-        String token = authorizationHeader.substring(7);
+        public void setToken(String token) {
+            this.token = token;
+        }
+    }
+
+    @PostMapping("/api/token/verify")
+    public ResponseEntity<String> verifyToken(@RequestBody TokenRequest tokenRequest) {
+        String token = tokenRequest.getToken();
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.badRequest().body("Token não fornecido.");
+        }
 
         try {
-            // Tenta extrair o sujeito (username ou ID do usuário) do token
             String username = jwtTokenService.pegarToken(token);
             return ResponseEntity.ok("Token válido para o usuário: " + username);
         } catch (JWTVerificationException e) {
-            // Retorna erro de autenticação se o token for inválido ou expirado
             return ResponseEntity.status(401).body("Token inválido ou expirado: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro interno do servidor: " + e.getMessage());
         }
     }
 }
