@@ -36,6 +36,10 @@ public class ModelUserDetailsImpl implements UserDetails {
         return modelUser.getEmail();
     }
 
+    public ModelUser getModelUser() {
+        return this.modelUser;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
