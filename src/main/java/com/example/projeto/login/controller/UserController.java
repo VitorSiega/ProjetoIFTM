@@ -108,6 +108,7 @@ public class UserController {
         Long IDD = Long.valueOf(id);
         ModelUser user = userRepository.findById(IDD)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        user.setSenha("");
         return user;
     }
 

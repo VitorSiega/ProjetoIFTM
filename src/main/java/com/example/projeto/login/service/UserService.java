@@ -89,8 +89,8 @@ public class UserService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
             }
 
-            if (!passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
-                // Criptografa a nova senha e atualiza
+            if (!updateUserDTO.senha().isEmpty()
+                    && !passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
                 String novaSenhaCriptografada = passwordEncoder.encode(updateUserDTO.senha());
                 userAtual.setSenha(novaSenhaCriptografada);
             }
@@ -108,7 +108,7 @@ public class UserService {
             userAtual.getRoles().clear();
             userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role()));
             userRepository.save(userAtual);
-            return ResponseEntity.status(200).body("Operador cadastrado");
+            return ResponseEntity.status(200).body("Operador atualizado");
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuário: " + e.getMessage());
