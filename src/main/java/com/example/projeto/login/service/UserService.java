@@ -77,12 +77,6 @@ public class UserService {
             ModelUser userAtual = userRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
 
-            if (updateUserDTO.senha().isEmpty()) {
-
-            } else if (!passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
-                userAtual.setSenha(updateUserDTO.senha());
-            }
-
             if (!userAtual.getEmail().equals(updateUserDTO.email())
                     && userRepository.findByEmail(updateUserDTO.email()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail ja cadastrado");
@@ -93,6 +87,12 @@ public class UserService {
             }
             if (updateUserDTO.operador() < 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
+            }
+
+            if (!passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
+                // Criptografa a nova senha e atualiza
+                String novaSenhaCriptografada = passwordEncoder.encode(updateUserDTO.senha());
+                userAtual.setSenha(novaSenhaCriptografada);
             }
 
             userAtual.setEmail(updateUserDTO.email());
