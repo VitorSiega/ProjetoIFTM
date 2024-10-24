@@ -78,9 +78,10 @@ public class UserService {
                     .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
             userAtual.setEmail(updateUserDTO.email());
 
-            if (!updateUserDTO.senha().isEmpty()
-                    && !passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
-                userAtual.setSenha(passwordEncoder.encode(updateUserDTO.senha()));
+            if (updateUserDTO.senha().isEmpty()) {
+
+            } else if (!passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
+                userAtual.setSenha(updateUserDTO.senha());
             }
             if (!userAtual.getEmail().equals(updateUserDTO.email())
                     && userRepository.findByEmail(updateUserDTO.email()).isPresent()) {
