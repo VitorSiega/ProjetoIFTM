@@ -1,6 +1,7 @@
 package com.example.projeto.login.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.projeto.login.dto.CreateUserDTO;
-import com.example.projeto.login.dto.JwtTokenDTO;
 import com.example.projeto.login.dto.LoginUserDTO;
 import com.example.projeto.login.errorStatus.ErrorResponse;
 import com.example.projeto.login.model.ModelUser;
+import com.example.projeto.login.model.ReturnModel;
 import com.example.projeto.login.repository.UserRepository;
 import com.example.projeto.login.service.UserService;
 
@@ -34,13 +35,16 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @SuppressWarnings("FieldMayBeFinal")
+    private ReturnModel returnModel = new ReturnModel();
 
     @PostMapping("/user/login")
     public ResponseEntity<?> loginUsuario(@RequestBody LoginUserDTO loginUserDto) {
         try {
-            // JwtTokenDTO token = userService.autenticarUsuario(loginUserDto);
-            JwtTokenDTO token = userService.autenticarUsuario(loginUserDto);
-            return new ResponseEntity<>(token, HttpStatus.OK);
+            Optional<ModelUser> userOptional = userRepository.findByEmail(loginUserDto.email());
+            returnModel.setTokenDTO(userService.autenticarUsuario(loginUserDto));
+            returnModel.setIdUsuario(String.valueOf(userOptional.get().getId()));
+            return new ResponseEntity<>(returnModel, HttpStatus.OK);
         } catch (AuthenticationException e) {
             // Autenticação falhou, retornar status 401
             return new ResponseEntity<>(new ErrorResponse("Credenciais inválidas"), HttpStatus.UNAUTHORIZED);
