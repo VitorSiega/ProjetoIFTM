@@ -73,28 +73,36 @@ public class UserService {
 
     public ResponseEntity<String> atualizarUsuario(Long id, CreateUserDTO updateUserDTO) {
         try {
-
             ModelUser userAtual = userRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
-            userAtual.setEmail(updateUserDTO.email());
 
-            if (updateUserDTO.senha().isEmpty()) {
-
-            } else if (!passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
-                userAtual.setSenha(updateUserDTO.senha());
+            // Verifica se uma nova senha foi fornecida
+            if (!updateUserDTO.senha().isEmpty()) {
+                // Verifica se a senha fornecida é diferente da atual
+                if (!passwordEncoder.matches(updateUserDTO.senha(), userAtual.getSenha())) {
+                    // Criptografa a nova senha e atualiza
+                    String novaSenhaCriptografada = passwordEncoder.encode(updateUserDTO.senha());
+                    userAtual.setSenha(novaSenhaCriptografada);
+                }
             }
+
+            // Verifica se o e-mail já existe em outro usuário
             if (!userAtual.getEmail().equals(updateUserDTO.email())
                     && userRepository.findByEmail(updateUserDTO.email()).isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail ja cadastrado");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("E-mail já cadastrado");
             }
+
+            // Verifica se o operador já existe em outro usuário
             if (updateUserDTO.operador() != 0 && userRepository.findByOperador(updateUserDTO.operador()).isPresent()
                     && !userAtual.getOperador().equals(updateUserDTO.operador())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador já existe");
             }
+
             if (updateUserDTO.operador() < 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número do operador inválido");
             }
 
+            // Atualiza os outros campos
             userAtual.setEmail(updateUserDTO.email());
             userAtual.setOperador(updateUserDTO.operador());
             userAtual.setNome(updateUserDTO.nome());
@@ -105,10 +113,15 @@ public class UserService {
             userAtual.setTipoSanguineo(updateUserDTO.tipoSanguineo());
             userAtual.setOcupacao(updateUserDTO.ocupacao());
             userAtual.setStatusOperador(updateUserDTO.statusOperador());
+
+            // Atualiza as roles
             userAtual.getRoles().clear();
             userAtual.getRoles().add(roleService.getOrCreateRole(updateUserDTO.role()));
+
+            // Salva as mudanças no banco de dados
             userRepository.save(userAtual);
-            return ResponseEntity.status(200).body("Operador cadastrado");
+
+            return ResponseEntity.status(HttpStatus.OK).body("Usuário atualizado com sucesso");
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao atualizar usuário: " + e.getMessage());
