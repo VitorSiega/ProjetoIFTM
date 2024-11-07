@@ -42,7 +42,9 @@ public class FinanceiroService {
 
     public List<FinanceiroModel> buscarCaixinha(LocalDate dataParaControle) {
 
-        List<FinanceiroModel> financeiroModelList = financeiroRepository.findByMesAtualAndAnoAtual(dataParaControle.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), dataParaControle.getYear());
+        List<FinanceiroModel> financeiroModelList = financeiroRepository.findByMesAtualAndAnoAtual(
+                dataParaControle.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()),
+                dataParaControle.getYear());
         String mes = dataParaControle.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
         int ano = dataParaControle.getYear();
 
@@ -53,10 +55,12 @@ public class FinanceiroService {
 
             for (int i = gerarListaSize; i < receberUsuarios.size(); i++) {
                 ModelUser usuario = receberUsuarios.get(i);
-                FinanceiroModel financeiro = FinanceiroModel.builder()
+                FinanceiroModel financeiro = new FinanceiroModel();
+                financeiro = FinanceiroModel.builder()
                         .user(usuario)
                         .mesAtual(mes)
                         .anoAtual(ano)
+                        .diaPago(financeiro.getDiaPago())
                         .valorPago(15.00)
                         .status("NÃO PAGO")
                         .build();

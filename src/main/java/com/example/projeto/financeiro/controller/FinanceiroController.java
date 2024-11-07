@@ -20,7 +20,7 @@ import com.example.projeto.financeiro.service.FinanceiroService;
 @RequestMapping("/api/admin/financeiro")
 public class FinanceiroController {
 
-    //atualiza
+    // atualiza
     @Autowired
     private FinanceiroService financeiroService;
 
@@ -29,11 +29,11 @@ public class FinanceiroController {
     @PutMapping("/atualizar")
     public ResponseEntity<?> atualizarCaixinha(@RequestBody List<FinanceiroDTO> financeiroDTO) {
 
-        //List<FinanceiroDTO> listaReduzida = new ArrayList<>();
+        // List<FinanceiroDTO> listaReduzida = new ArrayList<>();
         // financeiroDTO.forEach(financeiro -> {
-        //     if (financeiro.status().equals("PAGO")) {
-        //         listaReduzida.add(financeiro);
-        //     }
+        // if (financeiro.status().equals("PAGO")) {
+        // listaReduzida.add(financeiro);
+        // }
         // });
         // financeiroService.atualizarCaixinha(listaReduzida);
         financeiroService.atualizarCaixinha(financeiroDTO);
@@ -41,7 +41,8 @@ public class FinanceiroController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<FinanceiroModel>> listarCaixinha(@RequestParam("buscarPresencaData") LocalDate dataBuscar) {
+    public ResponseEntity<List<FinanceiroModel>> listarCaixinha(
+            @RequestParam("buscarPresencaData") LocalDate dataBuscar) {
         List<FinanceiroModel> caixinha = financeiroService.buscarCaixinha(dataBuscar);
         return ResponseEntity.ok(caixinha);
     }
